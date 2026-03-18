@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neo: #008197;
+  --neo-light: #00A8BD;
+  --neo-lighter: #00C8DC;
+  --neo-dark: #006577;
+  --fill-purple: #7C3AED;
+  --fill-cyan: #06B6D4;
+  --bg: #07080F;
+  --bg2: #0B0F1A;
+  --border: #1A2035;
+}
+
+* { box-sizing: border-box; padding: 0; margin: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: #07080F;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0B0F1A; }
+::-webkit-scrollbar-thumb { background: #008197; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00A8BD; }
+
+/* ── NeoRealiti gradient text ───────────────── */
+.neo-gradient-text {
+  background: linear-gradient(135deg, #008197, #00C8DC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── FillFlow gradient text ─────────────────── */
+.fill-gradient-text {
+  background: linear-gradient(135deg, #7C3AED, #06B6D4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Holographic (shared) ───────────────────── */
+@keyframes holographic {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.holographic {
+  background: linear-gradient(135deg, #008197, #00C8DC, #00D4AA, #06B6D4, #008197);
+  background-size: 300% 300%;
+  animation: holographic 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.holographic-fill {
+  background: linear-gradient(135deg, #7C3AED, #06B6D4, #00D4AA, #EC4899, #7C3AED);
+  background-size: 300% 300%;
+  animation: holographic 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Grid background ────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0,129,151,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,129,151,0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.grid-bg-fill {
+  background-image:
+    linear-gradient(rgba(124,58,237,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── Dot grid ───────────────────────────────── */
+.dot-grid {
+  background-image: radial-gradient(rgba(0,129,151,0.25) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Card hover ─────────────────────────────── */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 129, 151, 0.15);
+  border-color: rgba(0, 129, 151, 0.4);
+}
+
+.card-hover-fill:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2);
+  border-color: rgba(124, 58, 237, 0.5);
+}
+
+/* ── Neo glow ───────────────────────────────── */
+.neo-glow { box-shadow: 0 0 40px rgba(0, 129, 151, 0.35); }
+.fill-glow { box-shadow: 0 0 40px rgba(124, 58, 237, 0.35); }
+
+/* ── Scan line animation ────────────────────── */
+@keyframes scan-line {
+  0%   { top: -5%; opacity: 0.6; }
+  100% { top: 105%; opacity: 0; }
+}
+.scan-line {
+  position: absolute;
+  left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, #008197, transparent);
+  animation: scan-line 4s linear infinite;
+}
