@@ -63,8 +63,7 @@ export default function NeoNavigation() {
             <div className="hidden lg:flex items-center gap-3">
               <a
                 href="#contact"
-                className="px-5 py-2.5 rounded-full text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-                style={{ background: 'linear-gradient(135deg, #008197, #00C8DC)' }}
+                className="px-5 py-2.5 border border-white/70 text-white text-xs font-semibold tracking-[0.2em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
               >
                 Get In Touch
               </a>
@@ -103,8 +102,7 @@ export default function NeoNavigation() {
           <a
             href="#contact"
             onClick={() => setMenuOpen(false)}
-            className="mt-4 px-6 py-4 rounded-xl text-white text-lg font-bold text-center"
-            style={{ background: 'linear-gradient(135deg, #008197, #00C8DC)' }}
+            className="mt-4 px-6 py-4 border border-white/70 text-white text-sm font-semibold tracking-[0.2em] uppercase text-center hover:bg-white hover:text-[#07080F] transition-all duration-300"
           >
             Get In Touch
           </a>

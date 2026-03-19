@@ -5,13 +5,25 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { name, email, subject, message } = body
 
+    // Required fields
     if (!name || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    // Field length limits
+    if (typeof name !== 'string' || name.length < 2 || name.length > 100) {
+      return NextResponse.json({ error: 'Name must be 2–100 characters' }, { status: 400 })
+    }
+    if (typeof message !== 'string' || message.length < 10 || message.length > 5000) {
+      return NextResponse.json({ error: 'Message must be 10–5000 characters' }, { status: 400 })
+    }
+    if (subject && (typeof subject !== 'string' || subject.length > 200)) {
+      return NextResponse.json({ error: 'Subject must be under 200 characters' }, { status: 400 })
+    }
+
     // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
+    const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/
+    if (typeof email !== 'string' || email.length > 254 || !emailRegex.test(email)) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     }
 
@@ -28,9 +40,6 @@ export async function POST(req: NextRequest) {
         subject: `New message: ${subject || 'Contact Form'}`,
         text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject || 'N/A'}\n\nMessage:\n${message}`,
       })
-    } else {
-      // Dev mode — log to console until Resend key is configured
-      console.log('📧 Contact form submission:', { name, email, subject, message })
     }
 
     return NextResponse.json({ success: true, message: 'Message received!' })
