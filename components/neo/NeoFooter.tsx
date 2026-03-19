@@ -6,7 +6,7 @@ export default function NeoFooter() {
           {/* Brand */}
           <div className="md:col-span-2">
             <a href="#home">
-              <img src="/images/logo-green.svg" alt="NeoRealiti" className="h-8 w-auto mb-4" />
+              <img src="/images/logo-white-clean.svg" alt="NeoRealiti" className="h-8 w-auto mb-4" />
             </a>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
               Pioneering immersive technology across the Middle East — holographic, augmented reality, and AI automation under one roof.

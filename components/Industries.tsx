@@ -1,12 +1,20 @@
+import React from 'react'
+
+const IcoI = ({ d }: { d: string | string[] }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+    {(Array.isArray(d) ? d : [d]).map((path, i) => <path key={i} d={path} />)}
+  </svg>
+)
+
 const industries = [
-  { icon: '🏥', name: 'Healthcare', description: 'AI-powered patient intake, scheduling automation, and immersive training simulations.' },
-  { icon: '🏗️', name: 'Real Estate', description: 'Virtual property tours, AR staging, automated lead follow-up, and CRM pipelines.' },
-  { icon: '🛍️', name: 'Retail & E-Commerce', description: 'AR try-on experiences, smart inventory systems, and personalized automation flows.' },
-  { icon: '🎓', name: 'Education', description: 'Immersive learning platforms, holographic classrooms, and AI tutoring systems.' },
-  { icon: '🏛️', name: 'Government & Public', description: 'Holographic data visualization, citizen engagement platforms, and smart city tools.' },
-  { icon: '⚡', name: 'Energy & Industry', description: 'Holographic command centers, AI monitoring, and predictive maintenance systems.' },
-  { icon: '🎭', name: 'Events & Entertainment', description: 'Immersive brand activations, AR experiences, and automated event management.' },
-  { icon: '🏦', name: 'Finance & Banking', description: 'AI client onboarding, automated reporting, and secure workflow orchestration.' },
+  { icon: <IcoI d={["M22 12h-4l-3 9L9 3l-3 9H2"]} />, name: 'Healthcare', description: 'AI-powered patient intake, scheduling automation, and immersive training simulations.' },
+  { icon: <IcoI d={["M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", "M9 22V12h6v10"]} />, name: 'Real Estate', description: 'Virtual property tours, AR staging, automated lead follow-up, and CRM pipelines.' },
+  { icon: <IcoI d={["M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z", "M3 6h18", "M16 10a4 4 0 0 1-8 0"]} />, name: 'Retail & E-Commerce', description: 'AR try-on experiences, smart inventory systems, and personalized automation flows.' },
+  { icon: <IcoI d={["M22 10v6M2 10l10-5 10 5-10 5-10-5z", "M6 12v5c3 3 9 3 12 0v-5"]} />, name: 'Education', description: 'Immersive learning platforms, holographic classrooms, and AI tutoring systems.' },
+  { icon: <IcoI d={["M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", "M9 14h6v8H9z"]} />, name: 'Government & Public', description: 'Holographic data visualization, citizen engagement platforms, and smart city tools.' },
+  { icon: <IcoI d={["M13 2L3 14h9l-1 8 10-12h-9l1-8z"]} />, name: 'Energy & Industry', description: 'Holographic command centers, AI monitoring, and predictive maintenance systems.' },
+  { icon: <IcoI d={["M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"]} />, name: 'Events & Entertainment', description: 'Immersive brand activations, AR experiences, and automated event management.' },
+  { icon: <IcoI d={["M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"]} />, name: 'Finance & Banking', description: 'AI client onboarding, automated reporting, and secure workflow orchestration.' },
 ]
 
 const results = [
@@ -44,7 +52,7 @@ export default function Industries() {
               key={industry.name}
               className="group p-6 rounded-2xl bg-[#07080F] border border-[#1C1F35] card-hover"
             >
-              <div className="text-3xl mb-4 w-14 h-14 rounded-xl bg-[#1C1F35] flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+              <div className="mb-4 w-10 h-10 border border-[#1C1F35] flex items-center justify-center text-purple-400 group-hover:border-purple-500/40 group-hover:text-purple-300 transition-colors">
                 {industry.icon}
               </div>
               <h3 className="text-base font-bold mb-2">{industry.name}</h3>

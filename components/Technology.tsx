@@ -1,19 +1,40 @@
+const HoloIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+    <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+  </svg>
+)
+const AiIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+    <rect x="9" y="9" width="6" height="6" rx="1" /><path d="M9 2v2m6-2v2M9 20v2m6-2v2M2 9h2m-2 6h2M20 9h2m-2 6h2" />
+  </svg>
+)
+const ArIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" />
+  </svg>
+)
+const BizIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+    <path d="M3 3v18h18" /><path d="M18 17V9M13 17V5M8 17v-3" />
+  </svg>
+)
+
 const techs = [
   {
     title: 'Holographic Command Centers',
-    description:
-      'Transform how your team interacts with data. Our holographic command center infrastructure turns complex multidimensional data into intuitive, immersive interfaces.',
-    icon: '🔮',
+    description: 'Transform how your team interacts with data. Our holographic command center infrastructure turns complex multidimensional data into intuitive, immersive interfaces.',
+    Icon: HoloIcon,
+    iconColor: '#06B6D4',
     gradient: 'from-cyan-500/20 to-teal-500/10',
     border: 'border-cyan-500/20',
     link: 'https://www.euclideonme.com',
-    linkLabel: 'See Euclideon Tech →',
+    linkLabel: 'See Euclideon Tech',
   },
   {
     title: 'AI Capture & Lead Automation',
-    description:
-      'Never lose a lead again. Our AI systems capture, qualify, and nurture leads 24/7 — responding in under 60 seconds and routing high-value prospects automatically.',
-    icon: '🤖',
+    description: 'Never lose a lead again. Our AI systems capture, qualify, and nurture leads 24/7 — responding in under 60 seconds and routing high-value prospects automatically.',
+    Icon: AiIcon,
+    iconColor: '#7C3AED',
     gradient: 'from-purple-500/20 to-pink-500/10',
     border: 'border-purple-500/20',
     link: null,
@@ -21,9 +42,9 @@ const techs = [
   },
   {
     title: 'Augmented Reality Experiences',
-    description:
-      'From social AR filters to enterprise-grade spatial computing — we create AR experiences that connect brands with consumers in ways previously impossible.',
-    icon: '🥽',
+    description: 'From social AR filters to enterprise-grade spatial computing — we create AR experiences that connect brands with consumers in ways previously impossible.',
+    Icon: ArIcon,
+    iconColor: '#00D4AA',
     gradient: 'from-teal-500/20 to-cyan-500/10',
     border: 'border-teal-500/20',
     link: null,
@@ -31,9 +52,9 @@ const techs = [
   },
   {
     title: 'Intelligent Business Systems',
-    description:
-      'CRM automation, analytics dashboards, AI-powered reporting — full operational clarity so you always know what\'s working and where to grow next.',
-    icon: '📊',
+    description: "CRM automation, analytics dashboards, AI-powered reporting — full operational clarity so you always know what's working and where to grow next.",
+    Icon: BizIcon,
+    iconColor: '#F59E0B',
     gradient: 'from-amber-500/20 to-orange-500/10',
     border: 'border-amber-500/20',
     link: null,
@@ -78,8 +99,8 @@ export default function Technology() {
               className={`p-8 rounded-2xl bg-gradient-to-br ${tech.gradient} border ${tech.border} card-hover`}
             >
               <div className="flex items-start gap-5">
-                <div className="text-4xl flex-shrink-0 w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center">
-                  {tech.icon}
+                <div className="flex-shrink-0 mt-1" style={{ color: tech.iconColor }}>
+                  <tech.Icon />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold mb-3">{tech.title}</h3>
@@ -89,9 +110,10 @@ export default function Technology() {
                       href={tech.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300 font-semibold transition-colors"
+                      className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase border border-cyan-500/50 text-cyan-400 px-4 py-2 hover:bg-cyan-500/10 transition-colors"
                     >
                       {tech.linkLabel}
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" /></svg>
                     </a>
                   )}
                 </div>

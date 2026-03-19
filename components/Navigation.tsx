@@ -77,7 +77,7 @@ export default function Navigation() {
             <div className="hidden lg:flex items-center gap-4">
               <a
                 href="#booking"
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+                className="px-5 py-2.5 border border-white/70 text-white text-xs font-semibold tracking-[0.2em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
               >
                 Book a Meeting
               </a>
@@ -119,7 +119,7 @@ export default function Navigation() {
           <a
             href="#booking"
             onClick={() => setMenuOpen(false)}
-            className="mt-4 px-6 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-500 text-white text-lg font-semibold text-center"
+            className="mt-4 px-6 py-4 border border-white/70 text-white text-sm font-semibold tracking-[0.2em] uppercase text-center hover:bg-white hover:text-[#07080F] transition-all duration-300"
           >
             Book a Meeting
           </a>

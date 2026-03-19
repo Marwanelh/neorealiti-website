@@ -48,12 +48,21 @@ export default function NeoContact() {
 
             <div className="space-y-5">
               {[
-                { icon: '📍', label: 'Location', value: 'Sultanate of Oman, Middle East' },
-                { icon: '📧', label: 'Email', value: 'info@neorealiti.com' },
-                { icon: '🌐', label: 'Ventures', value: 'FillFlow · Euclideon ME' },
+                {
+                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M20 10c0 6-8 13-8 13s-8-7-8-13a8 8 0 0 1 16 0z" /><circle cx="12" cy="10" r="3" /></svg>,
+                  label: 'Location', value: 'Sultanate of Oman, Middle East',
+                },
+                {
+                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>,
+                  label: 'Email', value: 'info@neorealiti.com',
+                },
+                {
+                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>,
+                  label: 'Ventures', value: 'FillFlow · Euclideon ME',
+                },
               ].map(c => (
                 <div key={c.label} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#008197]/10 border border-[#008197]/20 flex items-center justify-center text-lg flex-shrink-0">
+                  <div className="w-10 h-10 border border-[#008197]/20 flex items-center justify-center text-[#008197] flex-shrink-0">
                     {c.icon}
                   </div>
                   <div>
@@ -69,7 +78,9 @@ export default function NeoContact() {
           <div className="p-8 rounded-3xl border border-[#1A2035] bg-[#0B0F1A]">
             {status === 'success' ? (
               <div className="text-center py-12">
-                <div className="text-5xl mb-4">✅</div>
+                <div className="w-14 h-14 border border-[#008197]/40 flex items-center justify-center mx-auto mb-4 text-[#008197]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><polyline points="20 6 9 17 4 12" /></svg>
+                </div>
                 <h3 className="text-xl font-bold text-white mb-2">Message Sent!</h3>
                 <p className="text-slate-400">We'll be in touch within one business day.</p>
                 <button
@@ -132,8 +143,7 @@ export default function NeoContact() {
                 <button
                   type="submit"
                   disabled={status === 'loading'}
-                  className="w-full py-3.5 rounded-xl text-white font-semibold text-sm hover:opacity-90 disabled:opacity-50 transition-opacity"
-                  style={{ background: 'linear-gradient(135deg, #008197, #00C8DC)' }}
+                  className="w-full py-3.5 border border-white/70 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {status === 'loading' ? 'Sending…' : 'Send Message'}
                 </button>

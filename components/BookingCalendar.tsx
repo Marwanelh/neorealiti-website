@@ -10,9 +10,18 @@ const TIME_SLOTS = [
 ]
 
 const MEETING_TYPES = [
-  { id: 'strategy', label: 'Free Strategy Call', duration: '30 min', icon: '🎯' },
-  { id: 'demo', label: 'Product Demo', duration: '45 min', icon: '🔮' },
-  { id: 'consultation', label: 'Full Consultation', duration: '60 min', icon: '💡' },
+  {
+    id: 'strategy', label: 'Free Strategy Call', duration: '30 min',
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="3" /></svg>,
+  },
+  {
+    id: 'demo', label: 'Product Demo', duration: '45 min',
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>,
+  },
+  {
+    id: 'consultation', label: 'Full Consultation', duration: '60 min',
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>,
+  },
 ]
 
 function getDaysInMonth(year: number, month: number) {
@@ -150,7 +159,7 @@ export default function BookingCalendar() {
                         : 'border-[#1C1F35] bg-[#0F1120] hover:border-purple-500/40'
                     }`}
                   >
-                    <div className="text-3xl mb-4">{type.icon}</div>
+                    <div className="mb-4 text-purple-400">{type.icon}</div>
                     <div className="font-bold mb-1">{type.label}</div>
                     <div className="text-sm text-slate-400">{type.duration}</div>
                   </button>
@@ -341,7 +350,7 @@ export default function BookingCalendar() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-base hover:opacity-90 transition-all duration-300 disabled:opacity-50"
+                  className="w-full py-4 border border-white/70 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300 disabled:opacity-40"
                 >
                   {submitting ? (
                     <span className="flex items-center justify-center gap-3">
