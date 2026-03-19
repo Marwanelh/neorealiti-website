@@ -1,3 +1,15 @@
+const FillFlowIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10">
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+  </svg>
+)
+
+const EuclideonIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10">
+    <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+  </svg>
+)
+
 const ventures = [
   {
     name: 'FillFlow',
@@ -8,7 +20,7 @@ const ventures = [
     color: '#7C3AED',
     gradient: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
     badge: 'New',
-    icon: '⚡',
+    Icon: FillFlowIcon,
     highlights: ['AI Lead Generation', 'CRM Automation', 'Workflow Intelligence', 'Custom AI Agents'],
   },
   {
@@ -20,7 +32,7 @@ const ventures = [
     color: '#00C8DC',
     gradient: 'linear-gradient(135deg, #008197, #00C8DC)',
     badge: null,
-    icon: '🔮',
+    Icon: EuclideonIcon,
     highlights: ['Holographic Displays', 'Volumetric 3D', 'Spatial Computing', 'Enterprise AR'],
   },
 ]
@@ -35,7 +47,7 @@ export default function NeoVentures() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="inline-block px-3 py-1 rounded-full border border-[#008197]/30 bg-[#008197]/10 text-[#00C8DC] text-xs font-semibold uppercase tracking-widest mb-5">
+          <span className="inline-block px-3 py-1 border border-[#008197]/30 bg-[#008197]/10 text-[#00C8DC] text-[10px] font-semibold uppercase tracking-[0.2em] mb-6">
             Our Ventures
           </span>
           <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
@@ -51,11 +63,11 @@ export default function NeoVentures() {
           {ventures.map(v => (
             <div
               key={v.name}
-              className="relative p-8 rounded-3xl border border-[#1A2035] bg-[#0F1420] overflow-hidden group card-hover"
+              className="relative p-8 border border-[#1A2035] bg-[#0F1420] overflow-hidden group hover:border-white/10 transition-colors"
             >
               {/* Gradient accent top bar */}
               <div
-                className="absolute top-0 left-0 right-0 h-1 rounded-t-3xl"
+                className="absolute top-0 left-0 right-0 h-px"
                 style={{ background: v.gradient }}
               />
 
@@ -67,8 +79,10 @@ export default function NeoVentures() {
 
               <div className="relative z-10">
                 <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <span className="text-4xl">{v.icon}</span>
+                  <div className="flex items-center gap-4">
+                    <div style={{ color: v.color }}>
+                      <v.Icon />
+                    </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="text-2xl font-black text-white">{v.name}</h3>
@@ -89,7 +103,7 @@ export default function NeoVentures() {
                   {v.highlights.map(h => (
                     <span
                       key={h}
-                      className="px-3 py-1 rounded-full text-xs font-semibold border"
+                      className="px-3 py-1 text-[10px] font-semibold border tracking-wide"
                       style={{
                         borderColor: `${v.color}30`,
                         backgroundColor: `${v.color}10`,
@@ -104,16 +118,21 @@ export default function NeoVentures() {
                 <a
                   href={v.href}
                   {...(v.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold text-sm hover:opacity-90 transition-opacity"
-                  style={{ background: v.gradient }}
+                  className="inline-flex items-center gap-3 px-7 py-3 border text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300"
+                  style={{ borderColor: `${v.color}80`, color: v.color }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = v.color
+                    ;(e.currentTarget as HTMLAnchorElement).style.color = '#07080F'
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'
+                    ;(e.currentTarget as HTMLAnchorElement).style.color = v.color
+                  }}
                 >
                   {v.external ? 'Visit Website' : 'Explore FillFlow'}
-                  {v.external
-                    ? <span className="text-xs opacity-70">↗</span>
-                    : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                  }
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={v.external ? "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" : "M17 8l4 4m0 0l-4 4m4-4H3"} />
+                  </svg>
                 </a>
               </div>
             </div>

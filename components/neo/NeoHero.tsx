@@ -70,70 +70,85 @@ export default function NeoHero() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden bg-[#07080F]">
-      {/* Animated canvas background */}
+
+      {/* Geometric triangle shapes — brand identity */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <polygon points="1440,900 720,900 1440,120" fill="#00414F" opacity="0.55" />
+        <polygon points="1440,900 900,900 1440,320" fill="#005F73" opacity="0.50" />
+        <polygon points="1440,900 1060,900 1440,500" fill="#007A8E" opacity="0.45" />
+        <polygon points="1440,900 1200,900 1440,680" fill="#008197" opacity="0.35" />
+        <polygon points="1440,900 1320,900 1440,820" fill="#00A8BD" opacity="0.25" />
+      </svg>
+
+      {/* Animated canvas — particles on top of triangles */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60" />
 
-      {/* Radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(0,129,151,0.12),transparent)]" />
-
-      {/* Grid */}
-      <div className="absolute inset-0 grid-bg opacity-40" />
+      {/* Radial glow center-left */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_30%_50%,rgba(0,129,151,0.10),transparent)]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
         <div className="max-w-4xl">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#008197]/30 bg-[#008197]/10 mb-8">
-            <span className="w-2 h-2 rounded-full bg-[#008197] animate-pulse" />
-            <span className="text-sm text-[#00C8DC] font-medium tracking-wide">Immersive Technology · Sultanate of Oman</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 border border-white/20 mb-10">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00C8DC] animate-pulse" />
+            <span className="text-xs text-white/70 font-medium tracking-[0.2em] uppercase">Immersive Technology · Sultanate of Oman</span>
           </div>
 
           {/* Heading */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] mb-6">
-            <span className="text-white">We're reimagining</span>
+            <span className="text-white">We&apos;re reimagining</span>
             <br />
             <span className="neo-gradient-text">how people interact</span>
             <br />
             <span className="text-white">with the world.</span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
+          <p className="text-lg sm:text-xl text-white/50 max-w-2xl mb-12 leading-relaxed tracking-wide">
             NeoRealiti pioneers immersive reality experiences — from holographic displays and augmented reality to AI-powered automation — giving businesses across the Middle East a decisive edge.
           </p>
 
+          {/* Buttons — original neorealiti.com outlined style */}
           <div className="flex flex-col sm:flex-row gap-4">
             <a
               href="#contact"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-semibold transition-opacity hover:opacity-90"
-              style={{ background: 'linear-gradient(135deg, #008197, #00C8DC)' }}
+              className="inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-white/80 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
             >
               Start a Project
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
             </a>
             <a
               href="#ventures"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-[#1A2035] text-slate-300 font-semibold hover:border-[#008197]/50 hover:text-white transition-all"
+              className="inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-white/30 text-white/70 text-xs font-semibold tracking-[0.25em] uppercase hover:border-white/70 hover:text-white transition-all duration-300"
             >
               Our Ventures
             </a>
           </div>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6">
+          <div className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5">
             {[
               { value: '10+', label: 'Years Experience' },
               { value: '50+', label: 'Enterprise Clients' },
               { value: '3', label: 'Active Ventures' },
               { value: '100%', label: 'Client Retention' },
             ].map(s => (
-              <div key={s.label} className="border border-[#1A2035] rounded-xl p-4 bg-[#0B0F1A]/60 backdrop-blur">
+              <div key={s.label} className="p-6 bg-[#07080F]">
                 <div className="text-3xl font-black neo-gradient-text">{s.value}</div>
-                <div className="text-sm text-slate-500 mt-1">{s.label}</div>
+                <div className="text-xs text-white/40 mt-1 tracking-[0.15em] uppercase">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 right-8 flex flex-col items-center gap-2 opacity-40">
+        <span className="text-white text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">Scroll Down</span>
+        <div className="w-px h-12 bg-gradient-to-b from-white/60 to-transparent" />
       </div>
     </section>
   )
