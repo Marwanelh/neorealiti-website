@@ -132,18 +132,23 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
           <a
             href="#booking"
-            className="group px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-base hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1"
+            className="inline-flex items-center gap-3 px-8 py-3.5 border border-white/80 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
           >
             Book a Free Strategy Call
-            <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform">→</span>
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </a>
           <a
             href="https://www.euclideonme.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-4 rounded-full border border-[#1C1F35] bg-[#0F1120]/50 backdrop-blur-sm text-white font-semibold text-base hover:border-cyan-500/50 hover:bg-[#0F1120] transition-all duration-300"
+            className="inline-flex items-center gap-3 px-8 py-3.5 border border-white/30 text-white/70 text-xs font-semibold tracking-[0.25em] uppercase hover:border-white/70 hover:text-white transition-all duration-300"
           >
-            Explore Holographic Tech ↗
+            Explore Holographic Tech
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+            </svg>
           </a>
         </div>
 

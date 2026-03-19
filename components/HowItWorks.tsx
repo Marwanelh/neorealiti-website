@@ -1,42 +1,66 @@
 const steps = [
   {
     step: '01',
-    icon: '🎯',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="3" />
+      </svg>
+    ),
     title: 'Discovery',
     description: 'We deep-dive into your business, goals, and pain points. No guesswork — we build a complete picture before writing a single line of code.',
     color: '#7C3AED',
   },
   {
     step: '02',
-    icon: '🗺️',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4" /><path d="M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" /><path d="M12 3v18" />
+      </svg>
+    ),
     title: 'Strategy',
     description: 'We craft a custom roadmap combining the right mix of AI, automation, and immersive tech to hit your specific targets.',
     color: '#9B59B6',
   },
   {
     step: '03',
-    icon: '⚡',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+      </svg>
+    ),
     title: 'Build',
     description: 'Our team executes fast — deploying AI systems, web presence, holographic experiences, or automation workflows in sprints.',
     color: '#06B6D4',
   },
   {
     step: '04',
-    icon: '🔁',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" /><path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" />
+      </svg>
+    ),
     title: 'Automate',
     description: 'We wire everything together — CRM, AI capture, follow-up sequences, analytics — so your business runs while you sleep.',
     color: '#00D4AA',
   },
   {
     step: '05',
-    icon: '📊',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 3v18h18" /><path d="M18 17V9M13 17V5M8 17v-3" />
+      </svg>
+    ),
     title: 'Optimize',
     description: 'Real data drives real decisions. We track performance, iterate fast, and continuously improve your results.',
     color: '#10B981',
   },
   {
     step: '06',
-    icon: '🚀',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    ),
     title: 'Scale',
     description: 'Once proven, we scale your systems — expanding reach, automating more, and building sustainable, compounding growth.',
     color: '#F59E0B',
@@ -78,8 +102,8 @@ export default function HowItWorks() {
                   {/* Step number + icon */}
                   <div className="flex items-center gap-4 mb-5">
                     <div
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-                      style={{ background: `${step.color}20`, border: `1px solid ${step.color}30` }}
+                      className="w-9 h-9 flex-shrink-0"
+                      style={{ color: step.color }}
                     >
                       {step.icon}
                     </div>
@@ -115,10 +139,12 @@ export default function HowItWorks() {
           <p className="text-slate-400 mb-6">Ready to start your transformation?</p>
           <a
             href="#contact"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold hover:opacity-90 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-purple-500/30"
+            className="inline-flex items-center gap-3 px-8 py-3.5 border border-white/70 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
           >
             Book a Free Strategy Call
-            <span>→</span>
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </a>
         </div>
       </div>

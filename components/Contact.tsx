@@ -2,19 +2,35 @@
 
 import { useState } from 'react'
 
+const PinIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <path d="M20 10c0 6-8 13-8 13s-8-7-8-13a8 8 0 0 1 16 0z" /><circle cx="12" cy="10" r="3" />
+  </svg>
+)
+const MailIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" />
+  </svg>
+)
+const PhoneIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
+)
+
 const contactInfo = [
   {
-    icon: '📍',
+    Icon: PinIcon,
     label: 'Our Office',
     value: '4th Floor, Hormuz Building\nWay No.: 3106, PO Box 488, PC 112\nRuwi, Sultanate of Oman',
   },
   {
-    icon: '📧',
+    Icon: MailIcon,
     label: 'Email Us',
     value: 'info@neorealiti.com',
   },
   {
-    icon: '📞',
+    Icon: PhoneIcon,
     label: 'Call Us',
     value: 'Phone: (+968) 24703844\nMobile: (+968) 99069082',
   },
@@ -146,7 +162,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-base hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-4 border border-white/70 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {status === 'sending' ? (
                       <span className="flex items-center justify-center gap-3">
@@ -170,8 +186,8 @@ export default function Contact() {
                 className="p-6 rounded-2xl bg-[#0F1120] border border-[#1C1F35]"
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-2xl w-12 h-12 rounded-xl bg-[#1C1F35] flex items-center justify-center flex-shrink-0">
-                    {info.icon}
+                  <div className="w-10 h-10 border border-purple-500/20 flex items-center justify-center flex-shrink-0 text-purple-400">
+                    <info.Icon />
                   </div>
                   <div>
                     <div className="text-xs text-purple-400 font-semibold uppercase tracking-widest mb-1">
@@ -190,16 +206,25 @@ export default function Contact() {
               <div className="text-xs text-purple-400 font-semibold uppercase tracking-widest mb-4">Follow Us</div>
               <div className="flex flex-col gap-2">
                 {[
-                  { platform: 'LinkedIn', icon: '💼', href: '#' },
-                  { platform: 'Twitter / X', icon: '𝕏', href: '#' },
-                  { platform: 'Facebook', icon: '📘', href: '#' },
+                  {
+                    platform: 'LinkedIn', href: '#',
+                    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg>,
+                  },
+                  {
+                    platform: 'Twitter / X', href: '#',
+                    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M4 4l16 16M4 20L20 4" /></svg>,
+                  },
+                  {
+                    platform: 'Facebook', href: '#',
+                    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>,
+                  },
                 ].map((s) => (
                   <a
                     key={s.platform}
                     href={s.href}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#1C1F35] transition-colors text-slate-400 hover:text-white text-sm"
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-[#1C1F35] transition-colors text-slate-400 hover:text-white text-sm"
                   >
-                    <span>{s.icon}</span>
+                    {s.icon}
                     <span>{s.platform}</span>
                   </a>
                 ))}
@@ -218,7 +243,7 @@ export default function Contact() {
                   placeholder="your@email.com"
                   className="flex-1 px-4 py-3 rounded-xl bg-[#07080F] border border-[#1C1F35] text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors text-sm min-w-0"
                 />
-                <button className="px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-sm hover:opacity-90 transition-opacity flex-shrink-0">
+                <button className="px-4 py-3 border border-white/60 text-white text-xs font-bold tracking-widest hover:bg-white hover:text-[#07080F] transition-all duration-300 flex-shrink-0">
                   →
                 </button>
               </div>
