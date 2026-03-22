@@ -6,7 +6,7 @@ export default function NeoFooter() {
           {/* Brand */}
           <div className="md:col-span-2">
             <a href="#home">
-              <img src="/images/logo-white-clean.svg" alt="NeoRealiti" className="h-8 w-auto mb-4" />
+              <img src="/images/logo-white-clean.svg" alt="Neorealiti" className="h-8 w-auto mb-4" />
             </a>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
               Pioneering immersive technology across the Middle East — holographic, augmented reality, and AI automation under one roof.
@@ -19,7 +19,7 @@ export default function NeoFooter() {
             <h4 className="text-white font-semibold text-sm mb-4">Our Ventures</h4>
             <ul className="space-y-2.5">
               {[
-                { label: 'NeoRealiti', href: '/', note: 'Immersive Tech' },
+                { label: 'Neorealiti', href: '/', note: 'Immersive Tech' },
                 { label: 'FillFlow', href: '/fillflow', note: 'AI Automation' },
                 { label: 'Euclideon ME', href: 'https://www.euclideonme.com', note: 'Holographic', external: true },
               ].map(l => (
@@ -58,10 +58,10 @@ export default function NeoFooter() {
 
         <div className="pt-8 border-t border-[#1A2035] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-slate-600 text-xs">
-            © {new Date().getFullYear()} NeoRealiti LLC. All rights reserved.
+            © {new Date().getFullYear()} Neorealiti LLC. All rights reserved.
           </p>
           <p className="text-slate-600 text-xs">
-            Powered by NeoRealiti · Sultanate of Oman
+            Powered by Neorealiti · Sultanate of Oman
           </p>
         </div>
       </div>

@@ -53,7 +53,7 @@ export default function NeoVentures() {
             Our Ventures
           </span>
           <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
-            The NeoRealiti<br />
+            The Neorealiti<br />
             <span className="neo-gradient-text">ecosystem</span>
           </h2>
           <p className="text-slate-400 text-lg">

@@ -15,7 +15,7 @@ const config: Config = {
           card: '#0F1420',
         },
         border: '#1A2035',
-        // NeoRealiti brand teal
+        // Neorealiti brand teal
         neo: {
           DEFAULT: '#008197',
           light: '#00A8BD',
@@ -38,7 +38,7 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        // NeoRealiti teal gradient
+        // Neorealiti teal gradient
         'neo-gradient': 'linear-gradient(135deg, #008197, #00C8DC)',
         // FillFlow purple→cyan gradient
         'fill-gradient': 'linear-gradient(135deg, #7C3AED, #06B6D4)',

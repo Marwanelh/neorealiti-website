@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const brands = [
   {
-    name: 'NeoRealiti',
+    name: 'Neorealiti',
     href: '/',
     description: 'Immersive Technology',
     icon: '🌐',

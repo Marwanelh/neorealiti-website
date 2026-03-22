@@ -109,7 +109,7 @@ export default function NeoHero() {
           </h1>
 
           <p className="text-lg sm:text-xl text-white/50 max-w-2xl mb-12 leading-relaxed tracking-wide">
-            NeoRealiti pioneers immersive reality experiences — from holographic displays and augmented reality to AI-powered automation — giving businesses across the Middle East a decisive edge.
+            Neorealiti pioneers immersive reality experiences — from holographic displays and augmented reality to AI-powered automation — giving businesses across the Middle East a decisive edge.
           </p>
 
           {/* Buttons — original neorealiti.com outlined style */}

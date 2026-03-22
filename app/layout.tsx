@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'NeoRealiti — AI & Immersive Technology',
+  title: 'Neorealiti — AI & Immersive Technology',
   description: 'Reimagining how businesses interact with the world through AI automation, holographic technology, and immersive experiences.',
-  keywords: ['AI', 'automation', 'holographic', 'immersive technology', 'Oman', 'NeoRealiti'],
+  keywords: ['AI', 'automation', 'holographic', 'immersive technology', 'Oman', 'Neorealiti'],
   openGraph: {
-    title: 'NeoRealiti — AI & Immersive Technology',
+    title: 'Neorealiti — AI & Immersive Technology',
     description: 'Reimagining how businesses interact with the world through AI automation, holographic technology, and immersive experiences.',
     type: 'website',
   },

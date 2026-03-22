@@ -54,7 +54,7 @@ export default function NeoAbout() {
           {/* Left copy */}
           <div>
             <span className="inline-block px-3 py-1 border border-[#008197]/30 bg-[#008197]/10 text-[#00C8DC] text-[10px] font-semibold uppercase tracking-[0.2em] mb-6">
-              About NeoRealiti
+              About Neorealiti
             </span>
             <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
               Technology that<br />

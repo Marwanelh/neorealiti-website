@@ -37,7 +37,7 @@ export default function Footer() {
             <a href="#home" className="inline-block mb-6">
               <img
                 src="/images/logo-white-clean.svg"
-                alt="NeoRealiti"
+                alt="Neorealiti"
                 className="h-10 w-auto"
               />
             </a>
@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="py-6 border-t border-[#1C1F35] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-500">
-            © {new Date().getFullYear()} NeoRealiti. All rights reserved.
+            © {new Date().getFullYear()} Neorealiti. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">Privacy Policy</a>

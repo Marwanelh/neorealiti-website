@@ -107,7 +107,7 @@ export default function Hero() {
         <div className="flex justify-center mb-10">
           <img
             src="/images/logo-white-clean.svg"
-            alt="NeoRealiti"
+            alt="Neorealiti"
             className="h-14 lg:h-20 w-auto"
           />
         </div>

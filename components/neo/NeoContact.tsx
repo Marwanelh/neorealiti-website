@@ -43,7 +43,7 @@ export default function NeoContact() {
               <span className="neo-gradient-text">something extraordinary?</span>
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-10">
-              Tell us about your project. Our team will get back to you within one business day to explore how NeoRealiti can help.
+              Tell us about your project. Our team will get back to you within one business day to explore how Neorealiti can help.
             </p>
 
             <div className="space-y-5">

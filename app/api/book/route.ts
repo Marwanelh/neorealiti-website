@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       const toEmail = process.env.CONTACT_EMAIL || 'info@neorealiti.com'
 
       await resend.emails.send({
-        from: 'NeoRealiti Bookings <onboarding@resend.dev>',
+        from: 'Neorealiti Bookings <onboarding@resend.dev>',
         to: toEmail,
         replyTo: email,
         subject: `New Booking: ${meetingType} on ${date} at ${time}`,

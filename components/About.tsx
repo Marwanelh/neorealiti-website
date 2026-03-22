@@ -18,7 +18,7 @@ const pillars = [
       </svg>
     ),
     title: 'Immersive Technology',
-    description: "NeoRealiti pioneered holographic experiences in Oman. We're establishing new standards in AR, VR, and spatial computing for businesses.",
+    description: "Neorealiti pioneered holographic experiences in Oman. We're establishing new standards in AR, VR, and spatial computing for businesses.",
     accent: 'from-cyan-600/20 to-cyan-600/5',
     border: 'border-cyan-500/20',
     iconColor: '#06B6D4',
@@ -68,7 +68,7 @@ export default function About() {
             <span className="gradient-text">Means of Engagement</span>
           </h2>
           <p className="max-w-3xl mx-auto text-lg text-slate-400 leading-relaxed">
-            <span className="text-white font-semibold">NeoRealiti</span> is redefining technology
+            <span className="text-white font-semibold">Neorealiti</span> is redefining technology
             as a means of engaging audiences through stronger communication and building better
             channels for interacting with information. We're establishing a new standard of
             exciting, immersive experiences in Oman — giving businesses the chance to cultivate

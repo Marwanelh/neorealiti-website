@@ -50,7 +50,7 @@ export default function Navigation() {
             <a href="#home" className="flex items-center">
               <img
                 src="/images/logo-white-clean.svg"
-                alt="NeoRealiti"
+                alt="Neorealiti"
                 className="h-8 lg:h-10 w-auto"
               />
             </a>
