@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 
 export default function NeoHero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const mouseRef = useRef({ x: -9999, y: -9999 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -18,14 +19,23 @@ export default function NeoHero() {
     resize()
     window.addEventListener('resize', resize)
 
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+    }
+    const onMouseLeave = () => { mouseRef.current = { x: -9999, y: -9999 } }
+    canvas.addEventListener('mousemove', onMouseMove)
+    canvas.addEventListener('mouseleave', onMouseLeave)
+
     const colors = ['#008197', '#00A8BD', '#00C8DC', '#00D4AA']
-    const particles: { x: number; y: number; vx: number; vy: number; r: number; color: string }[] = []
-    for (let i = 0; i < 70; i++) {
+    const particles: { x: number; y: number; vx: number; vy: number; baseVx: number; baseVy: number; r: number; color: string }[] = []
+    for (let i = 0; i < 80; i++) {
+      const vx = (Math.random() - 0.5) * 0.4
+      const vy = (Math.random() - 0.5) * 0.4
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
+        vx, vy, baseVx: vx, baseVy: vy,
         r: Math.random() * 2 + 1,
         color: colors[Math.floor(Math.random() * colors.length)],
       })
@@ -34,10 +44,30 @@ export default function NeoHero() {
     let frame: number
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+      const mouse = mouseRef.current
+
       for (const p of particles) {
+        // Mouse attraction
+        const dx = mouse.x - p.x
+        const dy = mouse.y - p.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < 180 && dist > 0) {
+          const force = ((180 - dist) / 180) * 0.25
+          p.vx += (dx / dist) * force
+          p.vy += (dy / dist) * force
+        } else {
+          // Drift back toward base velocity
+          p.vx += (p.baseVx - p.vx) * 0.02
+          p.vy += (p.baseVy - p.vy) * 0.02
+        }
+        // Speed cap
+        const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy)
+        if (speed > 2.5) { p.vx = (p.vx / speed) * 2.5; p.vy = (p.vy / speed) * 2.5 }
+
         p.x += p.vx; p.y += p.vy
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1
+
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
         ctx.fillStyle = p.color
@@ -45,6 +75,7 @@ export default function NeoHero() {
         ctx.fill()
         ctx.globalAlpha = 1
       }
+
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x
@@ -65,7 +96,13 @@ export default function NeoHero() {
       frame = requestAnimationFrame(draw)
     }
     draw()
-    return () => { cancelAnimationFrame(frame); window.removeEventListener('resize', resize) }
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('resize', resize)
+      canvas.removeEventListener('mousemove', onMouseMove)
+      canvas.removeEventListener('mouseleave', onMouseLeave)
+    }
   }, [])
 
   return (
@@ -85,10 +122,10 @@ export default function NeoHero() {
         <polygon points="1440,900 1320,900 1440,820" fill="#00A8BD" opacity="0.25" />
       </svg>
 
-      {/* Animated canvas — particles on top of triangles */}
+      {/* Animated canvas — interactive particles */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60" />
 
-      {/* Radial glow center-left */}
+      {/* Radial glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_30%_50%,rgba(0,129,151,0.10),transparent)]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
@@ -101,24 +138,24 @@ export default function NeoHero() {
 
           {/* Heading */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] mb-6">
-            <span className="text-white">We&apos;re reimagining</span>
+            <span className="text-white">We&apos;re Reimagining</span>
             <br />
-            <span className="neo-gradient-text">how people interact</span>
+            <span className="neo-gradient-text">How People Interact</span>
             <br />
-            <span className="text-white">with the world.</span>
+            <span className="text-white">With The World.</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-white/50 max-w-2xl mb-12 leading-relaxed tracking-wide">
             Neorealiti pioneers immersive reality experiences — from holographic displays and augmented reality to AI-powered automation — giving businesses across the Middle East a decisive edge.
           </p>
 
-          {/* Buttons — original neorealiti.com outlined style */}
+          {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-              href="#contact"
+              href="#booking"
               className="inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-white/80 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
             >
-              Start a Project
+              Book A Free Discovery Call
             </a>
             <a
               href="#ventures"

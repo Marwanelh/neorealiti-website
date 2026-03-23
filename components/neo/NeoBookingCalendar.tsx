@@ -124,8 +124,9 @@ export default function NeoBookingCalendar() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-[#008197]/30 mb-6">
             <span className="text-xs text-[#00C8DC] font-semibold uppercase tracking-widest">Schedule a Meeting</span>
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black mb-6 text-white">
-            Book a <span style={{ color: '#008197' }}>Free Discovery Call</span>
+          <h2 className="text-4xl lg:text-5xl font-black mb-6">
+            <span className="text-white">BOOK A FREE </span>
+            <span style={{ color: '#008197' }}>Discovery Call</span>
           </h2>
           <p className="max-w-xl mx-auto text-lg text-slate-400 leading-relaxed">
             Pick a time that works for you. No commitment — just a conversation about

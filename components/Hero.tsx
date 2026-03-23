@@ -11,6 +11,7 @@ const stats = [
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const mouseRef = useRef({ x: -9999, y: -9999 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -18,22 +19,33 @@ export default function Hero() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
 
+    const onMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY }
+    }
+    const onMouseLeave = () => { mouseRef.current = { x: -9999, y: -9999 } }
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseleave', onMouseLeave)
+
+    const colors = ['#7C3AED', '#06B6D4', '#00D4AA', '#EC4899']
     const particles: Array<{
       x: number; y: number; vx: number; vy: number;
+      baseVx: number; baseVy: number;
       size: number; opacity: number; color: string;
     }> = []
 
-    const colors = ['#7C3AED', '#06B6D4', '#00D4AA', '#EC4899']
-
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 70; i++) {
+      const vx = (Math.random() - 0.5) * 0.4
+      const vy = (Math.random() - 0.5) * 0.4
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
+        vx, vy, baseVx: vx, baseVy: vy,
         size: Math.random() * 2 + 0.5,
         opacity: Math.random() * 0.5 + 0.1,
         color: colors[Math.floor(Math.random() * colors.length)],
@@ -41,11 +53,26 @@ export default function Hero() {
     }
 
     let animId: number
-
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+      const mouse = mouseRef.current
 
       particles.forEach((p, i) => {
+        // Mouse attraction
+        const dx = mouse.x - p.x
+        const dy = mouse.y - p.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < 200 && dist > 0) {
+          const force = ((200 - dist) / 200) * 0.22
+          p.vx += (dx / dist) * force
+          p.vy += (dy / dist) * force
+        } else {
+          p.vx += (p.baseVx - p.vx) * 0.02
+          p.vy += (p.baseVy - p.vy) * 0.02
+        }
+        const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy)
+        if (speed > 2.5) { p.vx = (p.vx / speed) * 2.5; p.vy = (p.vy / speed) * 2.5 }
+
         p.x += p.vx
         p.y += p.vy
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1
@@ -57,14 +84,14 @@ export default function Hero() {
         ctx.fill()
 
         particles.slice(i + 1).forEach((p2) => {
-          const dx = p.x - p2.x
-          const dy = p.y - p2.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 150) {
+          const dx2 = p.x - p2.x
+          const dy2 = p.y - p2.y
+          const d = Math.sqrt(dx2 * dx2 + dy2 * dy2)
+          if (d < 150) {
             ctx.beginPath()
             ctx.moveTo(p.x, p.y)
             ctx.lineTo(p2.x, p2.y)
-            ctx.strokeStyle = `rgba(124, 58, 237, ${0.08 * (1 - dist / 150)})`
+            ctx.strokeStyle = `rgba(124, 58, 237, ${0.08 * (1 - d / 150)})`
             ctx.lineWidth = 0.5
             ctx.stroke()
           }
@@ -73,18 +100,14 @@ export default function Hero() {
 
       animId = requestAnimationFrame(animate)
     }
-
     animate()
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-    window.addEventListener('resize', handleResize)
-
+    window.addEventListener('resize', resize)
     return () => {
       cancelAnimationFrame(animId)
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseleave', onMouseLeave)
     }
   }, [])
 
@@ -103,15 +126,6 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
-        {/* Logo */}
-        <div className="flex justify-center mb-10">
-          <img
-            src="/images/logo-white-clean.svg"
-            alt="Neorealiti"
-            className="h-14 lg:h-20 w-auto"
-          />
-        </div>
-
         {/* Main heading */}
         <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.05] tracking-tight mb-6">
           Reimagining How
@@ -124,7 +138,7 @@ export default function Hero() {
         {/* Subheading */}
         <p className="max-w-3xl mx-auto text-lg lg:text-xl text-slate-400 leading-relaxed mb-10">
           We combine cutting-edge <span className="text-purple-400 font-semibold">AI automation</span> with{' '}
-          <span className="text-cyan-400 font-semibold">holographic & immersive technology</span> to build
+          <span className="text-cyan-400 font-semibold">holographic &amp; immersive technology</span> to build
           the future of business — from Oman to the world.
         </p>
 
@@ -134,7 +148,7 @@ export default function Hero() {
             href="#booking"
             className="inline-flex items-center gap-3 px-8 py-3.5 border border-white/80 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
           >
-            Book a Free Strategy Call
+            Book A Free Strategy Call
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -166,10 +180,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — no glitch */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
         <span className="text-xs text-slate-500 uppercase tracking-widest">Scroll</span>
-        <div className="w-px h-12 bg-gradient-to-b from-slate-500 to-transparent animate-pulse" />
+        <div className="w-px h-12 bg-gradient-to-b from-slate-500 to-transparent" />
       </div>
     </section>
   )

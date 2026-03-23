@@ -54,7 +54,7 @@ export default function NeoVentures() {
           </span>
           <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
             The Neorealiti<br />
-            <span className="neo-gradient-text">ecosystem</span>
+            <span className="neo-gradient-text">Ecosystem</span>
           </h2>
           <p className="text-slate-400 text-lg">
             Specialized brands, unified vision — each venture tackles a distinct dimension of the immersive technology landscape.

@@ -51,7 +51,7 @@ export default function Navigation() {
               <img
                 src="/images/logo-white-clean.svg"
                 alt="Neorealiti"
-                className="h-8 lg:h-10 w-auto"
+                className="h-10 lg:h-14 w-auto"
               />
             </a>
 

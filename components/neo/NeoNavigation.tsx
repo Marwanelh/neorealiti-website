@@ -40,7 +40,7 @@ export default function NeoNavigation() {
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo — green (teal) on dark bg */}
             <a href="#home" className="flex items-center">
-              <img src="/images/logo-white-clean.svg" alt="Neorealiti" className="h-7 lg:h-9 w-auto" />
+              <img src="/images/logo-white-clean.svg" alt="Neorealiti" className="h-10 lg:h-13 w-auto" />
             </a>
 
             {/* Desktop nav */}
