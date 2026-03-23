@@ -87,7 +87,7 @@ export default function Services() {
           </div>
           <h2 className="text-4xl lg:text-5xl xl:text-6xl font-black mb-6">
             Everything Your Business{' '}
-            <span className="gradient-text">Needs to Win</span>
+            <span className="gradient-text">Needs To Win</span>
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-slate-400 leading-relaxed">
             Eight powerful service areas covering AI, automation, immersive experiences,

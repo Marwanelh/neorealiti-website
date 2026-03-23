@@ -39,8 +39,8 @@ export default function NeoContact() {
               Contact
             </span>
             <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
-              Ready to build<br />
-              <span className="neo-gradient-text">something extraordinary?</span>
+              Ready To Build<br />
+              <span className="neo-gradient-text">Something Extraordinary?</span>
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-10">
               Tell us about your project. Our team will get back to you within one business day to explore how Neorealiti can help.

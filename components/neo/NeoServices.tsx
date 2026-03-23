@@ -96,8 +96,8 @@ export default function NeoServices() {
             What We Do
           </span>
           <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
-            Services built for the<br />
-            <span className="neo-gradient-text">next frontier</span>
+            Services Built For The<br />
+            <span className="neo-gradient-text">Next Frontier</span>
           </h2>
           <p className="text-white/50 text-lg">
             From concept to deployment — we handle every layer of your immersive technology initiative.

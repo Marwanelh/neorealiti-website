@@ -24,8 +24,8 @@ export default function NeoHero() {
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
     }
     const onMouseLeave = () => { mouseRef.current = { x: -9999, y: -9999 } }
-    canvas.addEventListener('mousemove', onMouseMove)
-    canvas.addEventListener('mouseleave', onMouseLeave)
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseleave', onMouseLeave)
 
     const colors = ['#008197', '#00A8BD', '#00C8DC', '#00D4AA']
     const particles: { x: number; y: number; vx: number; vy: number; baseVx: number; baseVy: number; r: number; color: string }[] = []
@@ -100,8 +100,8 @@ export default function NeoHero() {
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('resize', resize)
-      canvas.removeEventListener('mousemove', onMouseMove)
-      canvas.removeEventListener('mouseleave', onMouseLeave)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseleave', onMouseLeave)
     }
   }, [])
 

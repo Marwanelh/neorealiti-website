@@ -64,8 +64,8 @@ export default function About() {
             <span className="text-xs text-purple-400 font-semibold uppercase tracking-widest">Who We Are</span>
           </div>
           <h2 className="text-4xl lg:text-5xl xl:text-6xl font-black mb-6 leading-tight">
-            Redefining Technology as a{' '}
-            <span className="gradient-text">Means of Engagement</span>
+            Redefining Technology As A{' '}
+            <span className="gradient-text">Means Of Engagement</span>
           </h2>
           <p className="max-w-3xl mx-auto text-lg text-slate-400 leading-relaxed">
             <span className="text-white font-semibold">Neorealiti</span> is redefining technology

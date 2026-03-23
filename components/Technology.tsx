@@ -82,8 +82,8 @@ export default function Technology() {
             <span className="text-xs text-teal-400 font-semibold uppercase tracking-widest">Our Technology</span>
           </div>
           <h2 className="text-4xl lg:text-5xl xl:text-6xl font-black mb-6">
-            Built for the{' '}
-            <span className="gradient-text-teal">Future of Business</span>
+            Built For The{' '}
+            <span className="gradient-text-teal">Future Of Business</span>
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-slate-400 leading-relaxed">
             We combine breakthrough immersive technologies with AI automation to create

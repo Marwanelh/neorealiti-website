@@ -57,9 +57,9 @@ export default function NeoAbout() {
               About Neorealiti
             </span>
             <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
-              Technology that<br />
-              <span className="neo-gradient-text">closes the gap</span><br />
-              between digital and real.
+              Technology That<br />
+              <span className="neo-gradient-text">Closes The Gap</span><br />
+              Between Digital And Real.
             </h2>
             <p className="text-white/50 text-lg leading-relaxed mb-5">
               We are an immersive technology company headquartered in Oman, building the bridge between digital innovation and real-world business impact. From bespoke holographic installations to AI-driven process automation, every solution we deliver is engineered for measurable results.
