@@ -186,52 +186,82 @@ function placeholder(){
 placeholder();
 </script></body></html>`
 
-const voidHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}</style></head><body><canvas id="c"></canvas><div class="label">GLSL · Void Portal · Raymarching SDF</div><script>
+const voidHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}</style></head><body><canvas id="c"></canvas><script>
 var c=document.getElementById('c'),gl=c.getContext('webgl')||c.getContext('experimental-webgl'),mouse=[0.5,0.5],start=Date.now();
 function resize(){c.width=innerWidth;c.height=innerHeight;gl&&gl.viewport(0,0,c.width,c.height);}
 resize();window.addEventListener('resize',resize);
 window.addEventListener('mousemove',function(e){mouse[0]=e.clientX/innerWidth;mouse[1]=1.0-e.clientY/innerHeight;});
-if(!gl){document.body.innerHTML='<div style="color:#008197;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace">WebGL not supported</div>';}
+if(!gl){document.body.innerHTML='<div style="color:#008197;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace">WebGL not supported</div>';return;}
 var vs='attribute vec2 pos;void main(){gl_Position=vec4(pos,0.0,1.0);}';
 var fs=[
 'precision highp float;',
 'uniform float time;uniform vec2 res;uniform vec2 mouse;',
 'float sdSphere(vec3 p,float r){return length(p)-r;}',
 'float sdTorus(vec3 p,vec2 t){vec2 q=vec2(length(p.xz)-t.x,p.y);return length(q)-t.y;}',
-'float sdBox(vec3 p,vec3 b){vec3 q=abs(p)-b;return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0);}',
 'mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}',
 'float scene(vec3 p){',
-'  vec3 q=p;',
-'  q.xz=rot(time*0.3)*q.xz;',
-'  q.xy=rot(time*0.2)*q.xy;',
-'  float t1=sdTorus(q,vec2(1.2,0.35));',
-'  float t2=sdTorus(q.yxz,vec2(0.9,0.2));',
-'  float t3=sdTorus(q.xzy,vec2(0.6,0.15));',
-'  float s=sdSphere(p,0.4);',
+'  vec3 q=p;float spd=time*0.22;',
+'  q.xz=rot(spd)*q.xz;q.xy=rot(spd*0.65)*q.xy;',
+'  float t1=sdTorus(q,vec2(1.5,0.22));',
+'  float t2=sdTorus(q.yxz,vec2(1.05,0.16));',
+'  float t3=sdTorus(q.xzy,vec2(0.65,0.11));',
+'  float s=sdSphere(p,0.32);',
 '  return min(min(min(t1,t2),t3),s);}',
 'vec3 normal(vec3 p){vec2 e=vec2(0.001,0.0);',
 '  return normalize(vec3(scene(p+e.xyy)-scene(p-e.xyy),scene(p+e.yxy)-scene(p-e.yxy),scene(p+e.yyx)-scene(p-e.yyx)));}',
+'vec3 starField(vec3 rd){',
+'  vec3 col=mix(vec3(0.0,0.008,0.02),vec3(0.005,0.0,0.015),rd.y*0.5+0.5);',
+'  for(float i=1.0;i<=3.0;i++){',
+'    vec3 f=floor(rd*7.0*i);',
+'    float h=fract(sin(dot(f,vec3(127.1,311.7,74.7)))*43758.5);',
+'    col+=vec3(0.7,0.9,1.0)*pow(h,32.0)*0.6/i;}',
+'  return col;}',
 'void main(){',
 '  vec2 uv=(gl_FragCoord.xy-res*0.5)/res.y;',
 '  vec2 m=(mouse-0.5)*2.0;',
-'  vec3 ro=vec3(m.x*2.0,m.y*1.5,4.0);',
-'  vec3 rd=normalize(vec3(uv,-1.2));',
-'  float d=0.0,t=0.0;',
-'  for(int i=0;i<80;i++){vec3 p=ro+rd*t;d=scene(p);if(d<0.001||t>20.0)break;t+=d;}',
-'  vec3 col=vec3(0.0);',
-'  if(d<0.001){',
-'    vec3 p=ro+rd*t;vec3 n=normal(p);',
-'    vec3 l=normalize(vec3(1.0,2.0,3.0));',
-'    float diff=max(dot(n,l),0.0);',
-'    float spec=pow(max(dot(reflect(-l,n),-rd),0.0),32.0);',
-'    float rim=pow(1.0-max(dot(n,-rd),0.0),3.0);',
-'    vec3 teal=vec3(0.0,0.51,0.6);vec3 light=vec3(0.0,0.85,0.95);',
-'    col=teal*diff+light*spec*0.8+vec3(0.0,0.3,0.4)*rim;',
-'    float ao=1.0-t*0.035;col*=ao;',
-'  }',
-'  float fog=1.0-exp(-t*0.04);col=mix(col,vec3(0.0,0.02,0.04),fog);',
-'  col=pow(col,vec3(0.8));',
-'  gl_FragColor=vec4(col,1.0);}'].join('\\n');
+'  float theta=m.x*1.6+time*0.06;',
+'  float phi=m.y*0.7;',
+'  float camR=4.2;',
+'  vec3 ro=vec3(sin(theta)*cos(phi)*camR,sin(phi)*2.0+0.3,cos(theta)*cos(phi)*camR);',
+'  vec3 ta=vec3(0.0,0.0,0.0);',
+'  vec3 fwd=normalize(ta-ro);',
+'  vec3 right=normalize(cross(vec3(0.0,1.0,0.0),fwd));',
+'  vec3 up=cross(fwd,right);',
+'  vec3 rd=normalize(uv.x*right+uv.y*up+1.3*fwd);',
+'  float dist=0.0,tt=0.0;',
+'  for(int i=0;i<100;i++){',
+'    vec3 p=ro+rd*tt;dist=scene(p);',
+'    if(dist<0.0008||tt>20.0)break;tt+=dist*0.88;}',
+'  vec3 col=starField(rd);',
+'  if(dist<0.0008){',
+'    vec3 p=ro+rd*tt;vec3 n=normal(p);',
+'    vec3 l1=normalize(vec3(2.0,3.0,4.0));',
+'    vec3 l2=normalize(vec3(-1.5,-1.0,1.5));',
+'    float diff=max(dot(n,l1),0.0);',
+'    float diff2=max(dot(n,l2),0.0)*0.2;',
+'    float spec=pow(max(dot(reflect(-l1,n),-rd),0.0),90.0);',
+'    float nDotV=abs(dot(n,-rd));',
+'    float rim=pow(1.0-nDotV,2.8);',
+'    float fresnel=pow(1.0-nDotV,4.0);',
+'    vec3 darkC=vec3(0.0,0.06,0.14);',
+'    vec3 midC=vec3(0.0,0.38,0.52);',
+'    vec3 cyanC=vec3(0.0,0.82,1.0);',
+'    vec3 whiteC=vec3(0.6,1.0,1.0);',
+'    vec3 surfCol=darkC*(0.1+diff2);',
+'    surfCol+=midC*diff*0.8;',
+'    surfCol+=whiteC*spec*1.8;',
+'    surfCol+=cyanC*rim*3.0;',
+'    surfCol+=cyanC*fresnel*0.6;',
+'    float pulseSphere=length(p)<0.34?sin(time*2.2)*0.5+0.5:0.0;',
+'    surfCol+=cyanC*pulseSphere*1.5;',
+'    float ao=exp(-tt*0.018);surfCol*=ao;',
+'    float glow=smoothstep(0.05,0.0,dist);',
+'    surfCol+=cyanC*glow*0.4;',
+'    col=surfCol;}',
+'  float fog=1.0-exp(-tt*0.028);',
+'  col=mix(col,starField(rd)*0.4,fog);',
+'  col=pow(max(col,0.0),vec3(0.82));',
+'  gl_FragColor=vec4(col,1.0);}'].join("\\n");
 function sh(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
 var prog=gl.createProgram();
 gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs));
@@ -241,7 +271,7 @@ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_
 var pos=gl.getAttribLocation(prog,'pos');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
 var uT=gl.getUniformLocation(prog,'time'),uR=gl.getUniformLocation(prog,'res'),uM=gl.getUniformLocation(prog,'mouse');
 (function draw(){requestAnimationFrame(draw);var t=(Date.now()-start)/1000;gl.uniform1f(uT,t);gl.uniform2f(uR,c.width,c.height);gl.uniform2f(uM,mouse[0],mouse[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);})();
-</script></body></html>`
+<\/script></body></html>`
 
 const voidTunnelHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}</style></head><body><div class="label">P5.JS · Void Tunnel · Mouse X: twist · Mouse Y: speed</div><script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script><script>
 new p5(function(p){
@@ -414,7 +444,8 @@ new p5(function(p){
     p.colorMode(p.HSB,360,100,100,100);
   };
   p.draw=function(){
-    p.fill(0,0,0,20);p.rect(0,0,p.width,p.height);
+    if(video&&video.width>0){p.colorMode(p.RGB);p.push();p.translate(p.width,0);p.scale(-1,1);p.tint(0,140,160,130);p.image(video,0,0,p.width,p.height);p.noTint();p.pop();p.colorMode(p.HSB,360,100,100,100);}
+    p.fill(0,0,0,18);p.noStroke();p.rect(0,0,p.width,p.height);
     if(video.width>0){
       video.loadPixels();
       if(video.pixels.length>0){
@@ -484,7 +515,7 @@ window.addEventListener('resize',function(){
   W=innerWidth;H=innerHeight;
   bgC.width=W;bgC.height=H;ovC.width=W;ovC.height=H;
 });
-var handResults=null,sphereX=W/2,sphereY=H/2,sphereR=80;
+var handResults=null,sphereX=W/2,sphereY=H/2,sphereR=80,videoEl=null;
 var t=0,particles=[];
 function setStatus(s){document.getElementById('st').textContent=s;}
 function lerp(a,b,f){return a+(b-a)*f;}
@@ -575,8 +606,7 @@ function drawHands(results){
 function render(){
   requestAnimationFrame(render);
   t+=0.02;
-  bgCtx.fillStyle='rgba(0,0,0,0.3)';
-  bgCtx.fillRect(0,0,W,H);
+  if(videoEl&&videoEl.readyState>=2){bgCtx.save();bgCtx.scale(-1,1);bgCtx.translate(-W,0);bgCtx.drawImage(videoEl,0,0,W,H);bgCtx.restore();bgCtx.fillStyle='rgba(0,5,10,0.4)';bgCtx.fillRect(0,0,W,H);}else{bgCtx.fillStyle='rgba(0,0,0,1)';bgCtx.fillRect(0,0,W,H);}
   if(handResults&&handResults.multiHandLandmarks&&handResults.multiHandLandmarks.length>=2){
     var h0=handResults.multiHandLandmarks[0];
     var h1=handResults.multiHandLandmarks[1];
@@ -606,7 +636,7 @@ document.getElementById('startBtn').addEventListener('click',function(){
   document.getElementById('ui').classList.remove('show');
   setStatus('Starting camera...');
   navigator.mediaDevices.getUserMedia({video:{width:W,height:H,facingMode:'user'},audio:false}).then(function(stream){
-    var videoEl=document.createElement('video');
+    videoEl=document.createElement('video');
     videoEl.srcObject=stream;videoEl.autoplay=true;videoEl.playsinline=true;videoEl.muted=true;
     videoEl.style.display='none';
     document.body.appendChild(videoEl);
