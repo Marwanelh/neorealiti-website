@@ -163,6 +163,13 @@ export default function NeoHero() {
             >
               Our Ventures
             </a>
+            <a
+              href="/visuals"
+              className="inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-[#008197]/40 text-[#00C8DC] text-xs font-semibold tracking-[0.25em] uppercase hover:border-[#008197] hover:bg-[#008197]/10 transition-all duration-300"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00C8DC]" />
+              Visual Studio
+            </a>
           </div>
 
           {/* Stats */}

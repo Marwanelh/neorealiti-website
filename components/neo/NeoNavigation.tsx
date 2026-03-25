@@ -10,6 +10,7 @@ const navLinks = [
   { href: '#ventures', label: 'Our Ventures' },
   { href: '#booking', label: 'Book a Meeting' },
   { href: '#contact', label: 'Contact' },
+  { href: '/visuals', label: 'Studio', external: true },
 ]
 
 export default function NeoNavigation() {
@@ -51,7 +52,9 @@ export default function NeoNavigation() {
                   href={link.href}
                   className={cn(
                     'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
-                    active === link.href.replace('#', '')
+                    link.href === '/visuals'
+                      ? 'text-[#00C8DC] border border-[#008197]/30 hover:bg-[#008197]/10'
+                      : active === link.href.replace('#', '')
                       ? 'text-white bg-[#008197]/20 border border-[#008197]/30'
                       : 'text-slate-400 hover:text-white hover:bg-[#1A2035]/60'
                   )}
