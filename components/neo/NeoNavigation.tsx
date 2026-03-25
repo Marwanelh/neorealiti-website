@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
-  { href: '#home', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#services', label: 'Services' },
-  { href: '#ventures', label: 'Our Ventures' },
-  { href: '#booking', label: 'Book a Meeting' },
-  { href: '#contact', label: 'Contact' },
-  { href: '/visuals', label: 'Studio', external: true },
+  { href: '/#home', label: 'Home' },
+  { href: '/#about', label: 'About' },
+  { href: '/#services', label: 'Services' },
+  { href: '/#ventures', label: 'Our Ventures' },
+  { href: '/#booking', label: 'Book a Meeting' },
+  { href: '/#contact', label: 'Contact' },
+  { href: '/visuals', label: 'Studio' },
 ]
 
 export default function NeoNavigation() {
@@ -21,7 +21,7 @@ export default function NeoNavigation() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
-      const sections = navLinks.map(l => l.href.replace('#', ''))
+      const sections = navLinks.map(l => l.href.replace('/#', '').replace('/', ''))
       for (const s of [...sections].reverse()) {
         const el = document.getElementById(s)
         if (el && window.scrollY >= el.offsetTop - 130) { setActive(s); break }
@@ -54,7 +54,7 @@ export default function NeoNavigation() {
                     'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
                     link.href === '/visuals'
                       ? 'text-[#00C8DC] border border-[#008197]/30 hover:bg-[#008197]/10'
-                      : active === link.href.replace('#', '')
+                      : active === link.href.replace('/#', '')
                       ? 'text-white bg-[#008197]/20 border border-[#008197]/30'
                       : 'text-slate-400 hover:text-white hover:bg-[#1A2035]/60'
                   )}
@@ -104,7 +104,7 @@ export default function NeoNavigation() {
             </a>
           ))}
           <a
-            href="#contact"
+            href="/#contact"
             onClick={() => setMenuOpen(false)}
             className="mt-4 px-6 py-4 border border-white/70 text-white text-sm font-semibold tracking-[0.2em] uppercase text-center hover:bg-white hover:text-[#07080F] transition-all duration-300"
           >
