@@ -13,6 +13,8 @@ const techColors: Record<string, string> = {
   'p5.js / Camera': '#00C8DC',
   'p5.js / Optical Flow': '#00C8DC',
   'MediaPipe / Canvas': '#00D4AA',
+  'ML5 / HandPose': '#00E5BB',
+  'ML5 / FaceMesh': '#00E5BB',
 }
 
 export default function DemoPage() {

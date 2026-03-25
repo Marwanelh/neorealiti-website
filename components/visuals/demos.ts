@@ -13,7 +13,7 @@ export interface Demo {
   id: string
   title: string
   description: string
-  category: 'shader' | 'generative' | 'interactive' | 'camera'
+  category: 'shader' | 'generative' | 'interactive' | 'camera' | 'ai-ml'
   tech: string
   thumbnail: string
   camera: boolean
@@ -111,79 +111,85 @@ if(r.life<=0||r.x<0||r.x>p.width||r.y<0||r.y>p.height)pars[i]={x:p.random(p.widt
 t++;};});
 </script></body></html>`
 
-const cameraHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{overflow:hidden;background:#000}video{display:none}canvas{display:block}.label{position:fixed;top:16px;left:16px;color:rgba(0,200,215,0.6);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.status{position:fixed;top:16px;right:16px;color:rgba(0,200,215,0.6);font-family:monospace;font-size:10px;letter-spacing:.08em}.ui{position:fixed;bottom:20px;left:0;right:0;display:flex;justify-content:center;gap:12px}.btn{padding:8px 22px;border:1px solid rgba(0,129,151,0.5);background:transparent;color:#00C8DC;font-family:monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s}.btn:hover{background:rgba(0,129,151,0.15);border-color:#008197}</style></head><body>
-<canvas id="c"></canvas><video id="v" autoplay playsinline muted></video>
-<div class="label">Camera Vision · AR Mode</div>
-<div class="status" id="st">Loading AR model...</div>
-<div class="ui"><button class="btn" id="camBtn">Enable Camera</button><button class="btn" id="fxBtn">Effect: Teal</button></div>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7/dist/blazeface.min.js"></script>
-<script>
-var canvas=document.getElementById('c'),ctx=canvas.getContext('2d'),video=document.getElementById('v');
-var stream=null,model=null,active=false,fx=0,faces=[],fc=0;
-var effects=['Teal','Night Vision','Holographic'];
-canvas.width=innerWidth;canvas.height=innerHeight;
-window.addEventListener('resize',function(){canvas.width=innerWidth;canvas.height=innerHeight;});
+const cameraHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.st{position:fixed;top:16px;right:16px;color:rgba(0,200,215,0.6);font-family:monospace;font-size:10px;letter-spacing:.08em}.ui{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.btn{padding:10px 26px;border:1px solid rgba(0,129,151,0.6);background:transparent;color:#00C8DC;font-family:monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.btn:hover{background:rgba(0,129,151,0.15)}.hint{color:rgba(0,200,215,0.35);font-family:monospace;font-size:10px;margin-top:10px}</style></head><body>
+<canvas id="c"></canvas>
+<div class="label">Face Mesh · 468 Landmarks · ML5</div>
+<div class="st" id="st">Initialising...</div>
+<div class="ui" id="ui"><button class="btn" onclick="startCam()">Enable Camera</button><div class="hint">Camera · Face Mesh · Particles</div></div>
+<script src="https://unpkg.com/ml5@1.0.1/dist/ml5.min.js"></script><script>
+var C=document.getElementById('c'),ctx=C.getContext('2d');
+var W=C.width=innerWidth,H=C.height=innerHeight;
+window.addEventListener('resize',function(){W=C.width=innerWidth;H=C.height=innerHeight;});
+var video=null,faces=[],fm=null,pts=[],frame=0;
+var OVAL=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
+var LEYE=[362,382,381,380,374,373,390,249,263,466,388,387,386,385,384,398];
+var REYE=[33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246];
+var LBROW=[336,296,334,293,300,276,283,282,295,285];
+var RBROW=[70,63,105,66,107,55,65,52,53,46];
+var NOSE=[168,6,197,195,5,4,1,19,94];
+var LOUT=[61,146,91,181,84,17,314,405,321,375,291,409,270,269,267,0,37,39,40,185];
+var LIN=[78,95,88,178,87,14,317,402,318,324,308,415,310,311,312,13,82,81,80,191];
 function setStatus(s){document.getElementById('st').textContent=s;}
-blazeface.load().then(function(m){model=m;setStatus('AR ready · Click Enable Camera');}).catch(function(){setStatus('Click Enable Camera');});
-document.getElementById('camBtn').addEventListener('click',function(){if(!active){startCam(this);}else{stopCam(this);}});
-document.getElementById('fxBtn').addEventListener('click',function(){fx=(fx+1)%3;this.textContent='Effect: '+effects[fx];});
-function startCam(btn){
-  navigator.mediaDevices.getUserMedia({video:{width:1280,height:720},audio:false}).then(function(s){
-    stream=s;video.srcObject=s;video.play();active=true;btn.textContent='Disable Camera';
-    setStatus('Camera active'+(model?' · Face tracking ON':''));render();
-  }).catch(function(e){setStatus('Camera error: '+e.message);});}
-function stopCam(btn){if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}active=false;btn.textContent='Enable Camera';faces=[];placeholder();}
-function applyFx(data){
-  for(var i=0;i<data.length;i+=4){
-    var r=data[i],g=data[i+1],b=data[i+2],l=0.299*r+0.587*g+0.114*b;
-    if(fx===0){data[i]=0;data[i+1]=l*0.82;data[i+2]=l*0.94;}
-    else if(fx===1){var boost=Math.min(255,l*2.3);data[i]=0;data[i+1]=boost;data[i+2]=boost*0.12;}
-    else{data[i]=Math.min(255,l*0.25);data[i+1]=Math.min(255,l*0.95+20);data[i+2]=Math.min(255,l*1.1+15);}}}
-function drawFaces(){
-  if(!faces.length)return;
-  var vw=video.videoWidth||canvas.width,vh=video.videoHeight||canvas.height;
-  var sc=Math.max(canvas.width/vw,canvas.height/vh);
-  var ox=(canvas.width-vw*sc)/2,oy=(canvas.height-vh*sc)/2;
-  ctx.save();
-  for(var f=0;f<faces.length;f++){
-    var face=faces[f],tl=face.topLeft,br=face.bottomRight,lm=face.landmarks;
-    var x1=canvas.width-(tl[0]*sc+ox),y1=tl[1]*sc+oy;
-    var x2=canvas.width-(br[0]*sc+ox),y2=br[1]*sc+oy;
-    var bx=Math.min(x1,x2),by=y1,bw=Math.abs(x2-x1),bh=y2-y1;
-    ctx.strokeStyle='rgba(0,200,215,0.85)';ctx.lineWidth=1;ctx.strokeRect(bx,by,bw,bh);
-    ctx.strokeStyle='#00C8DC';ctx.lineWidth=2;
-    var cz=14;
-    ctx.beginPath();ctx.moveTo(bx,by+cz);ctx.lineTo(bx,by);ctx.lineTo(bx+cz,by);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(bx+bw-cz,by);ctx.lineTo(bx+bw,by);ctx.lineTo(bx+bw,by+cz);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(bx,by+bh-cz);ctx.lineTo(bx,by+bh);ctx.lineTo(bx+cz,by+bh);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(bx+bw-cz,by+bh);ctx.lineTo(bx+bw,by+bh);ctx.lineTo(bx+bw,by+bh-cz);ctx.stroke();
-    ctx.fillStyle='rgba(0,200,215,0.8)';ctx.font='9px monospace';ctx.letterSpacing='0.08em';ctx.fillText('FACE DETECTED',bx+2,by-5);
-    if(lm){ctx.fillStyle='#00C8DC';for(var l=0;l<lm.length;l++){var lx=canvas.width-(lm[l][0]*sc+ox),ly=lm[l][1]*sc+oy;ctx.beginPath();ctx.arc(lx,ly,3,0,Math.PI*2);ctx.fill();}}
-  }ctx.restore();}
+function startCam(){
+  document.getElementById('ui').style.display='none';
+  navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'},audio:false}).then(function(stream){
+    video=document.createElement('video');
+    video.srcObject=stream;video.autoplay=true;video.playsInline=true;video.muted=true;video.style.display='none';
+    document.body.appendChild(video);
+    video.play().catch(function(){});
+    setStatus('Loading face mesh model...');
+    fm=ml5.faceMesh({maxFaces:1,refineLandmarks:false,flipHorizontal:true});
+    fm.detectStart(video,function(r){faces=r;});
+    setStatus('Point camera at your face');
+    render();
+  }).catch(function(e){setStatus('Camera error: '+e.message);});
+}
+function drawContour(idxs,kp,dx,dy,sw,sh,close,squig){
+  if(!kp||kp.length<1)return;
+  ctx.beginPath();
+  for(var i=0;i<idxs.length;i++){
+    var p=kp[idxs[i]];if(!p)continue;
+    var px=dx+p.x*sw,py=dy+p.y*sh;
+    if(squig){var s=Math.sin(frame*0.05+i*1.1)*1.8;px+=s;py+=Math.cos(frame*0.04+i*0.9)*1.2;}
+    if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+  }
+  if(close)ctx.closePath();ctx.stroke();
+}
 function render(){
-  if(!active)return;
-  ctx.save();ctx.scale(-1,1);ctx.translate(-canvas.width,0);
-  var vw=video.videoWidth||canvas.width,vh=video.videoHeight||canvas.height;
-  var sc=Math.max(canvas.width/vw,canvas.height/vh);
-  var dw=vw*sc,dh=vh*sc,dx=(canvas.width-dw)/2,dy=(canvas.height-dh)/2;
-  ctx.drawImage(video,dx,dy,dw,dh);ctx.restore();
-  var img=ctx.getImageData(0,0,canvas.width,canvas.height);applyFx(img.data);ctx.putImageData(img,0,0);
-  ctx.fillStyle='rgba(0,129,151,0.04)';for(var y=0;y<canvas.height;y+=3)ctx.fillRect(0,y,canvas.width,1);
-  var gr=ctx.createRadialGradient(canvas.width/2,canvas.height/2,canvas.height*0.2,canvas.width/2,canvas.height/2,canvas.height*0.8);
-  gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,10,15,0.6)');ctx.fillStyle=gr;ctx.fillRect(0,0,canvas.width,canvas.height);
-  fc++;if(model&&fc%6===0&&video.readyState===4){model.estimateFaces(video,false).then(function(r){faces=r;}).catch(function(){});}
-  drawFaces();requestAnimationFrame(render);}
-function placeholder(){
-  if(active)return;
-  ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle='rgba(0,129,151,0.07)';ctx.lineWidth=1;
-  for(var x=0;x<canvas.width;x+=44){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}
-  for(var y=0;y<canvas.height;y+=44){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}
-  ctx.fillStyle='rgba(0,200,215,0.25)';ctx.font='11px monospace';ctx.textAlign='center';
-  ctx.fillText('ENABLE CAMERA TO ACTIVATE AR MODE',canvas.width/2,canvas.height/2);
-  requestAnimationFrame(placeholder);}
-placeholder();
+  requestAnimationFrame(render);frame++;
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  if(video&&video.readyState>=2){
+    var vw=video.videoWidth||640,vh=video.videoHeight||480;
+    var sc=Math.max(W/vw,H/vh),dw=vw*sc,dh=vh*sc,dx=(W-dw)/2,dy=(H-dh)/2;
+    var sw=dw/vw,sh=dh/vh;
+    ctx.save();ctx.translate(W,0);ctx.scale(-1,1);ctx.globalAlpha=0.28;ctx.drawImage(video,dx,dy,dw,dh);ctx.globalAlpha=1;ctx.restore();
+    ctx.fillStyle='rgba(0,5,12,0.52)';ctx.fillRect(0,0,W,H);
+    if(faces&&faces.length>0){
+      var face=faces[0],kp=face.keypoints;
+      ctx.fillStyle='rgba(0,200,215,0.09)';
+      for(var i=0;i<kp.length;i++){var p=kp[i];ctx.beginPath();ctx.arc(dx+p.x*sw,dy+p.y*sh,0.9,0,Math.PI*2);ctx.fill();}
+      ctx.lineWidth=1;ctx.shadowBlur=8;ctx.shadowColor='#00C8DC';
+      ctx.strokeStyle='rgba(0,200,215,0.75)';drawContour(OVAL,kp,dx,dy,sw,sh,true,false);
+      ctx.strokeStyle='rgba(0,200,215,0.65)';drawContour(LEYE,kp,dx,dy,sw,sh,true,true);drawContour(REYE,kp,dx,dy,sw,sh,true,true);
+      ctx.strokeStyle='rgba(0,200,215,0.5)';drawContour(LBROW,kp,dx,dy,sw,sh,false,true);drawContour(RBROW,kp,dx,dy,sw,sh,false,true);
+      ctx.strokeStyle='rgba(0,180,200,0.4)';drawContour(NOSE,kp,dx,dy,sw,sh,false,false);
+      ctx.strokeStyle='rgba(0,230,245,0.8)';drawContour(LOUT,kp,dx,dy,sw,sh,true,false);drawContour(LIN,kp,dx,dy,sw,sh,true,false);
+      ctx.shadowBlur=0;
+      if(frame%2===0&&Math.random()<0.6){var fp=kp[OVAL[Math.floor(Math.random()*OVAL.length)]];if(fp)pts.push({x:dx+fp.x*sw,y:dy+fp.y*sh,vx:(Math.random()-0.5)*0.7,vy:-Math.random()*1-0.2,life:1,sz:Math.random()*1.8+0.4});}
+      setStatus('Face mesh · '+kp.length+' landmarks');
+    }else{setStatus('Point camera at your face');}
+  }
+  for(var pi=pts.length-1;pi>=0;pi--){var pt=pts[pi];pt.x+=pt.vx;pt.y+=pt.vy;pt.vy-=0.012;pt.life-=0.016;if(pt.life<=0){pts.splice(pi,1);continue;}ctx.globalAlpha=pt.life*0.65;ctx.fillStyle='#00C8DC';ctx.beginPath();ctx.arc(pt.x,pt.y,pt.sz*pt.life,0,Math.PI*2);ctx.fill();}
+  ctx.globalAlpha=1;
+  ctx.fillStyle='rgba(0,100,120,0.025)';for(var sy=0;sy<H;sy+=3)ctx.fillRect(0,sy,W,1);
+  var vg=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H*.85);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,5,12,0.7)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+}
+ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+ctx.strokeStyle='rgba(0,129,151,0.07)';ctx.lineWidth=1;
+for(var gx=0;gx<W;gx+=44){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+for(var gy=0;gy<H;gy+=44){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+ctx.fillStyle='rgba(0,200,215,0.25)';ctx.font='11px monospace';ctx.textAlign='center';
+ctx.fillText('ENABLE CAMERA TO ACTIVATE FACE MESH',W/2,H/2);
 </script></body></html>`
 
 const voidHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}</style></head><body><canvas id="c"></canvas><script>
@@ -191,7 +197,7 @@ var c=document.getElementById('c'),gl=c.getContext('webgl')||c.getContext('exper
 function resize(){c.width=innerWidth;c.height=innerHeight;gl&&gl.viewport(0,0,c.width,c.height);}
 resize();window.addEventListener('resize',resize);
 window.addEventListener('mousemove',function(e){mouse[0]=e.clientX/innerWidth;mouse[1]=1.0-e.clientY/innerHeight;});
-if(!gl){document.body.innerHTML='<div style="color:#008197;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace">WebGL not supported</div>';return;}
+if(!gl){document.body.innerHTML='<div style="color:#008197;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace">WebGL not supported</div>';}else{
 var vs='attribute vec2 pos;void main(){gl_Position=vec4(pos,0.0,1.0);}';
 var fs=[
 'precision highp float;',
@@ -270,7 +276,7 @@ var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
 gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
 var pos=gl.getAttribLocation(prog,'pos');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
 var uT=gl.getUniformLocation(prog,'time'),uR=gl.getUniformLocation(prog,'res'),uM=gl.getUniformLocation(prog,'mouse');
-(function draw(){requestAnimationFrame(draw);var t=(Date.now()-start)/1000;gl.uniform1f(uT,t);gl.uniform2f(uR,c.width,c.height);gl.uniform2f(uM,mouse[0],mouse[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);})();
+(function draw(){requestAnimationFrame(draw);var t=(Date.now()-start)/1000;gl.uniform1f(uT,t);gl.uniform2f(uR,c.width,c.height);gl.uniform2f(uM,mouse[0],mouse[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);})();}
 <\/script></body></html>`
 
 const voidTunnelHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}</style></head><body><div class="label">P5.JS · Void Tunnel · Mouse X: twist · Mouse Y: speed</div><script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script><script>
@@ -491,7 +497,7 @@ new p5(function(p){
     p.noStroke();
     p.fill(pt.h,85,100,pt.life*100);
     var speed=Math.sqrt(pt.vx*pt.vx+pt.vy*pt.vy);
-    var sz=(speed+2)*pt.life;
+    var sz=Math.max(0.8,pt.life*2.5);
     p.rect(pt.x,pt.y,sz,sz);
     p.pop();
   }
@@ -515,7 +521,7 @@ window.addEventListener('resize',function(){
   W=innerWidth;H=innerHeight;
   bgC.width=W;bgC.height=H;ovC.width=W;ovC.height=H;
 });
-var handResults=null,sphereX=W/2,sphereY=H/2,sphereR=80,videoEl=null;
+var handResults=null,sphereX=W/2,sphereY=H/2,sphereR=80,sphereAlpha=0,videoEl=null;
 var t=0,particles=[];
 function setStatus(s){document.getElementById('st').textContent=s;}
 function lerp(a,b,f){return a+(b-a)*f;}
@@ -526,49 +532,49 @@ function spawnParticles(cx,cy,r){
   var py=cy+Math.sin(angle)*r;
   particles.push({x:px,y:py,vx:(Math.random()-0.5)*1.5,vy:-Math.random()*2-0.5,life:1.0,size:Math.random()*3+1});
 }
-function drawSphere(cx,cy,r){
-  var pts=64;
-  var glow=bgCtx.createRadialGradient(cx,cy,0,cx,cy,r*1.8);
-  glow.addColorStop(0,'rgba(0,129,151,0.0)');
-  glow.addColorStop(0.5,'rgba(0,129,151,0.08)');
-  glow.addColorStop(1,'rgba(0,129,151,0.0)');
-  bgCtx.fillStyle=glow;
-  bgCtx.beginPath();bgCtx.arc(cx,cy,r*1.8,0,Math.PI*2);bgCtx.fill();
-  bgCtx.beginPath();
-  for(var i=0;i<=pts;i++){
-    var angle=i/pts*Math.PI*2;
-    var dr=Math.sin(angle*3+t*2)*r*0.06+Math.sin(angle*7+t*1.3)*r*0.03;
-    var rr=r+dr;
-    var x=cx+Math.cos(angle)*rr;
-    var y=cy+Math.sin(angle)*rr;
-    if(i===0)bgCtx.moveTo(x,y);else bgCtx.lineTo(x,y);
-  }
+function buildSpherePath(cx,cy,r){
+  var pts=96;bgCtx.beginPath();
+  for(var i=0;i<=pts;i++){var ang=i/pts*Math.PI*2;var dr=Math.sin(ang*3+t*1.6)*r*0.045+Math.sin(ang*7+t*1.1)*r*0.022+Math.sin(ang*13+t*0.8)*r*0.01;var rr=r+dr;if(i===0)bgCtx.moveTo(cx+Math.cos(ang)*rr,cy+Math.sin(ang)*rr);else bgCtx.lineTo(cx+Math.cos(ang)*rr,cy+Math.sin(ang)*rr);}
   bgCtx.closePath();
-  var grad=bgCtx.createRadialGradient(cx-r*0.2,cy-r*0.2,r*0.05,cx,cy,r);
-  grad.addColorStop(0,'rgba(0,230,245,0.9)');
-  grad.addColorStop(0.5,'rgba(0,150,175,0.7)');
-  grad.addColorStop(1,'rgba(0,60,100,0.4)');
-  bgCtx.fillStyle=grad;
-  bgCtx.fill();
-  bgCtx.strokeStyle='rgba(0,200,215,0.5)';
-  bgCtx.lineWidth=1.5;
-  bgCtx.stroke();
-  for(var ring=1;ring<=2;ring++){
-    var ringR=r*(0.4+ring*0.2);
-    bgCtx.beginPath();
-    for(var j=0;j<=pts;j++){
-      var a2=j/pts*Math.PI*2;
-      var dr2=Math.sin(a2*5+t*1.5+ring)*ringR*0.04;
-      var rr2=ringR+dr2;
-      var x2=cx+Math.cos(a2)*rr2;
-      var y2=cy+Math.sin(a2)*rr2;
-      if(j===0)bgCtx.moveTo(x2,y2);else bgCtx.lineTo(x2,y2);
-    }
-    bgCtx.closePath();
-    bgCtx.strokeStyle='rgba(0,200,215,'+(0.15-ring*0.04)+')';
-    bgCtx.lineWidth=1;
-    bgCtx.stroke();
-  }
+}
+function drawSphere(cx,cy,r,alpha){
+  var sa=alpha||1;bgCtx.save();bgCtx.globalAlpha=sa;
+  // Ambient outer glow
+  var og=bgCtx.createRadialGradient(cx,cy,r*0.6,cx,cy,r*2.1);
+  og.addColorStop(0,'rgba(0,160,200,0.20)');og.addColorStop(0.6,'rgba(0,100,150,0.07)');og.addColorStop(1,'rgba(0,0,0,0)');
+  bgCtx.fillStyle=og;bgCtx.beginPath();bgCtx.arc(cx,cy,r*2.1,0,Math.PI*2);bgCtx.fill();
+  // Clipped interior
+  buildSpherePath(cx,cy,r);bgCtx.save();bgCtx.clip();
+  // Dark glass body
+  var body=bgCtx.createRadialGradient(cx+r*0.15,cy+r*0.2,0,cx,cy,r*1.05);
+  body.addColorStop(0,'rgba(6,38,58,0.92)');body.addColorStop(0.45,'rgba(0,18,32,0.96)');body.addColorStop(0.85,'rgba(0,7,16,0.99)');body.addColorStop(1,'rgba(0,2,8,1.0)');
+  bgCtx.fillStyle=body;bgCtx.fillRect(cx-r*1.2,cy-r*1.2,r*2.4,r*2.4);
+  // Internal caustic teal glow
+  var caus=bgCtx.createRadialGradient(cx+r*0.08,cy+r*0.22,0,cx+r*0.08,cy+r*0.12,r*0.78);
+  caus.addColorStop(0,'rgba(0,195,220,0.30)');caus.addColorStop(0.4,'rgba(0,145,185,0.13)');caus.addColorStop(0.8,'rgba(0,75,120,0.05)');caus.addColorStop(1,'rgba(0,0,0,0)');
+  bgCtx.fillStyle=caus;bgCtx.fillRect(cx-r*1.2,cy-r*1.2,r*2.4,r*2.4);
+  // Animated shimmer (liquid wobble)
+  var sw=Math.sin(t*2.3)*0.14,sh2=Math.cos(t*1.8)*0.11;
+  var shim=bgCtx.createRadialGradient(cx+r*sw,cy+r*sh2,0,cx+r*sw,cy+r*sh2,r*0.42);
+  shim.addColorStop(0,'rgba(0,215,240,0.22)');shim.addColorStop(1,'rgba(0,0,0,0)');
+  bgCtx.fillStyle=shim;bgCtx.fillRect(cx-r*1.2,cy-r*1.2,r*2.4,r*2.4);
+  // Primary specular highlight (white, upper-left)
+  var s1=bgCtx.createRadialGradient(cx-r*0.38,cy-r*0.40,0,cx-r*0.30,cy-r*0.33,r*0.50);
+  s1.addColorStop(0,'rgba(255,255,255,1.0)');s1.addColorStop(0.12,'rgba(225,248,255,0.80)');s1.addColorStop(0.35,'rgba(160,225,242,0.32)');s1.addColorStop(0.75,'rgba(60,160,200,0.06)');s1.addColorStop(1,'rgba(0,0,0,0)');
+  bgCtx.fillStyle=s1;bgCtx.fillRect(cx-r*1.2,cy-r*1.2,r*2.4,r*2.4);
+  // Secondary specular (lower-right, soft)
+  var s2=bgCtx.createRadialGradient(cx+r*0.44,cy+r*0.40,0,cx+r*0.44,cy+r*0.40,r*0.20);
+  s2.addColorStop(0,'rgba(190,235,255,0.38)');s2.addColorStop(1,'rgba(0,0,0,0)');
+  bgCtx.fillStyle=s2;bgCtx.fillRect(cx-r*1.2,cy-r*1.2,r*2.4,r*2.4);
+  // Environment reflection band
+  var env=bgCtx.createLinearGradient(cx-r*0.9,cy,cx+r*0.9,cy);
+  env.addColorStop(0,'rgba(0,0,0,0)');env.addColorStop(0.25,'rgba(0,175,215,0.10)');env.addColorStop(0.5,'rgba(60,205,235,0.18)');env.addColorStop(0.75,'rgba(0,175,215,0.10)');env.addColorStop(1,'rgba(0,0,0,0)');
+  bgCtx.fillStyle=env;bgCtx.fillRect(cx-r*1.2,cy-r*0.12,r*2.4,r*0.24);
+  bgCtx.restore();
+  // Rim glow stroke
+  buildSpherePath(cx,cy,r);
+  bgCtx.strokeStyle='rgba(0,200,215,0.85)';bgCtx.lineWidth=1.5;bgCtx.shadowBlur=22;bgCtx.shadowColor='rgba(0,200,215,0.9)';bgCtx.stroke();bgCtx.shadowBlur=0;
+  bgCtx.restore();
 }
 function drawParticles(){
   for(var i=particles.length-1;i>=0;i--){
@@ -610,8 +616,8 @@ function render(){
   if(handResults&&handResults.multiHandLandmarks&&handResults.multiHandLandmarks.length>=2){
     var h0=handResults.multiHandLandmarks[0];
     var h1=handResults.multiHandLandmarks[1];
-    var p0x=(1-h0[0].x)*W,p0y=h0[0].y*H;
-    var p1x=(1-h1[0].x)*W,p1y=h1[0].y*H;
+    var p0x=(1-h0[9].x)*W,p0y=h0[9].y*H;
+    var p1x=(1-h1[9].x)*W,p1y=h1[9].y*H;
     var midX=(p0x+p1x)/2,midY=(p0y+p1y)/2;
     var dist=Math.sqrt((p1x-p0x)*(p1x-p0x)+(p1y-p0y)*(p1y-p0y));
     var targetR=Math.max(30,Math.min(200,dist*0.35));
@@ -656,6 +662,269 @@ bgCtx.fillStyle='#000';bgCtx.fillRect(0,0,W,H);
 bgCtx.strokeStyle='rgba(0,129,151,0.07)';bgCtx.lineWidth=1;
 for(var gx=0;gx<W;gx+=44){bgCtx.beginPath();bgCtx.moveTo(gx,0);bgCtx.lineTo(gx,H);bgCtx.stroke();}
 for(var gy=0;gy<H;gy+=44){bgCtx.beginPath();bgCtx.moveTo(0,gy);bgCtx.lineTo(W,gy);bgCtx.stroke();}
+</script></body></html>`
+
+const neuralRippleHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.st{position:fixed;top:16px;right:16px;color:rgba(0,200,215,0.6);font-family:monospace;font-size:10px;letter-spacing:.08em}.ui{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.btn{padding:10px 26px;border:1px solid rgba(0,129,151,0.6);background:transparent;color:#00C8DC;font-family:monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.btn:hover{background:rgba(0,129,151,0.15)}.hint{color:rgba(0,200,215,0.35);font-family:monospace;font-size:10px;margin-top:10px}</style></head><body>
+<div class="label">ML5 · Neural Ripple · Hand Pose + GLSL</div>
+<div class="st" id="st">Initialising...</div>
+<div class="ui" id="ui"><button class="btn" onclick="startSketch()">Enable Camera</button><div class="hint">Open your hand to trigger ripples</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+<script src="https://unpkg.com/ml5@1.0.1/dist/ml5.min.js"></script><script>
+var VERT='attribute vec3 aPosition;attribute vec2 aTexCoord;uniform mat4 uModelViewMatrix;uniform mat4 uProjectionMatrix;varying vec2 vTexCoord;void main(){vTexCoord=aTexCoord;gl_Position=uProjectionMatrix*uModelViewMatrix*vec4(aPosition,1.0);}';
+var FRAG='precision highp float;varying vec2 vTexCoord;uniform sampler2D tex0;uniform vec2 uResolution;uniform vec2 uVideoSize;uniform float uTime;uniform vec3 uWaves[40];uniform int uWaveCount;void main(){vec2 uv=vTexCoord;vec2 p=uv*2.0-1.0;float aspect=uResolution.x/uResolution.y;p.x*=aspect;vec2 td=vec2(0.0);float ta=0.0;for(int i=0;i<40;i++){if(i>=uWaveCount)break;vec3 w=uWaves[i];vec2 c=w.xy*2.0-1.0;c.x*=aspect;vec2 d=p-c;float dist=length(d);float age=w.z;float r=age*0.9+0.1*sin(age*6.0);float ww=0.05+age*0.12;float dd=dist-r;float mask=smoothstep(ww,0.0,abs(dd));float str=1.0-age/2.5;float rip=sin(dd*30.0)*mask*str;vec2 dir=(dist>0.001)?normalize(d):vec2(0.0);td+=dir*rip*0.05;ta+=abs(rip);}vec2 duv=uv-td;vec2 ratio=uResolution/uVideoSize;float sc=max(ratio.x,ratio.y);vec2 off=(uResolution-uVideoSize*sc)*0.5;vec2 vu=(duv*uResolution-off)/(uVideoSize*sc);vu.x=1.0-vu.x;if(vu.x<0.0||vu.x>1.0||vu.y<0.0||vu.y>1.0){gl_FragColor=vec4(0.0,0.0,0.0,1.0);}else{float r2=texture2D(tex0,vu+td*0.01).r;float g=texture2D(tex0,vu).g;float b=texture2D(tex0,vu-td*0.01).b;vec3 col=vec3(r2,g,b);col+=vec3(ta*0.15);gl_FragColor=vec4(col,1.0);}}';
+function setStatus(s){document.getElementById('st').textContent=s;}
+function startSketch(){
+  document.getElementById('ui').style.display='none';
+  setStatus('Loading...');
+  new p5(function(p){
+    var video,handPose,hands=[],ripples=[],ripSh,wellPos,wellVel,wellTarget;
+    var eF=0.08,damp=0.75,maxR=40;
+    p.setup=async function(){
+      p.createCanvas(p.windowWidth,p.windowHeight,p.WEBGL);
+      p.noStroke();
+      video=p.createCapture(p.VIDEO);video.size(640,480);video.hide();
+      handPose=await ml5.handPose({flipped:true});
+      handPose.detectStart(video,function(r){hands=r;});
+      ripSh=p.createShader(VERT,FRAG);
+      wellPos=p.createVector(0.5,0.5);wellVel=p.createVector(0,0);wellTarget=p.createVector(0.5,0.5);
+      setStatus('Open your hand to create ripples');
+    };
+    p.windowResized=function(){p.resizeCanvas(p.windowWidth,p.windowHeight);};
+    function dSq(a,b){return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y);}
+    function isOpen(h){
+      var w=h.wrist;
+      var ti=[h.index_finger_tip,h.middle_finger_tip,h.ring_finger_tip,h.pinky_finger_tip];
+      var mi=[h.index_finger_mcp,h.middle_finger_mcp,h.ring_finger_mcp,h.pinky_finger_mcp];
+      var o=0;for(var i=0;i<4;i++)if(dSq(ti[i],w)>dSq(mi[i],w)*1.8)o++;return o>=3;
+    }
+    function physics(){
+      var vw=video.width||640,vh=video.height||480;
+      var sc=Math.max(p.width/vw,p.height/vh);
+      var ox=(p.width-vw*sc)*0.5,oy=(p.height-vh*sc)*0.5;
+      var cnt=0,active=false,cx=0,cy=0;
+      for(var i=0;i<hands.length;i++){
+        var h=hands[i],k=h.middle_finger_mcp;
+        if(k){cx+=k.x*sc+ox;cy+=k.y*sc+oy;cnt++;}
+        if(isOpen(h))active=true;
+      }
+      if(cnt>0)wellTarget.set(cx/cnt/p.width,cy/cnt/p.height);
+      var f=p5.Vector.sub(wellTarget,wellPos);f.mult(eF);wellVel.add(f);wellVel.mult(damp);wellPos.add(wellVel);
+      if(active&&cnt>0&&p.frameCount%8===0)ripples.push({x:wellPos.x,y:wellPos.y,age:0});
+    }
+    p.draw=function(){
+      p.background(0);
+      if(!video.width)return;
+      physics();
+      for(var i=ripples.length-1;i>=0;i--){ripples[i].age+=0.015;if(ripples[i].age>2.5)ripples.splice(i,1);}
+      if(ripples.length>maxR)ripples.shift();
+      p.shader(ripSh);
+      ripSh.setUniform('tex0',video);
+      ripSh.setUniform('uResolution',[p.width,p.height]);
+      ripSh.setUniform('uVideoSize',[video.width||640,video.height||480]);
+      ripSh.setUniform('uTime',p.millis()*0.001);
+      var data=new Array(maxR*3).fill(0);
+      for(var j=0;j<ripples.length;j++){data[j*3]=ripples[j].x;data[j*3+1]=ripples[j].y;data[j*3+2]=ripples[j].age;}
+      ripSh.setUniform('uWaves',data);
+      ripSh.setUniform('uWaveCount',ripples.length);
+      p.plane(p.width,p.height);
+      if(p.frameCount%30===0)setStatus(hands.length>0?'Hand detected · Open palm for ripples':'Show your hand to the camera');
+    };
+  });
+}
+</script></body></html>`
+
+const ribbonWarpHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.st{position:fixed;top:16px;right:16px;color:rgba(0,200,215,0.6);font-family:monospace;font-size:10px;letter-spacing:.08em}.ui{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.btn{padding:10px 26px;border:1px solid rgba(0,129,151,0.6);background:transparent;color:#00C8DC;font-family:monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.btn:hover{background:rgba(0,129,151,0.15)}.hint{color:rgba(0,200,215,0.35);font-family:monospace;font-size:10px;margin-top:10px}</style></head><body>
+<div class="label">ML5 · Ribbon Warp · Hand Pose + GLSL</div>
+<div class="st" id="st">Initialising...</div>
+<div class="ui" id="ui"><button class="btn" onclick="startSketch()">Enable Camera</button><div class="hint">Hold two hands up · A ribbon connects them</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+<script src="https://unpkg.com/ml5@1.0.1/dist/ml5.min.js"></script><script>
+var VERT='precision highp float;attribute vec3 aPosition;attribute vec2 aTexCoord;uniform mat4 uProjectionMatrix;uniform mat4 uModelViewMatrix;varying vec2 vTexCoord;varying vec4 vScreenPos;void main(){vTexCoord=aTexCoord;vec4 pos=uProjectionMatrix*uModelViewMatrix*vec4(aPosition,1.0);vScreenPos=pos;gl_Position=pos;}';
+var FRAG='precision highp float;uniform sampler2D tex0;uniform float uTime;varying vec2 vTexCoord;varying vec4 vScreenPos;float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float noise2(vec2 p){vec2 i=floor(p);vec2 f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(hash21(i),hash21(i+vec2(1.0,0.0)),f.x),mix(hash21(i+vec2(0.0,1.0)),hash21(i+vec2(1.0,1.0)),f.x),f.y);}void main(){vec2 suv=(vScreenPos.xy/vScreenPos.w)*0.5+0.5;suv.y=1.0-suv.y;float t=uTime;float n=noise2(suv*3.2+vec2(t*0.08,-t*0.06));float distort=sin((suv.x*10.0+n*2.2)+t*2.0)*0.010+sin((suv.y*5.0-n*1.6)-t*1.0)*0.010;float r=texture2D(tex0,suv+vec2(distort+0.006,0.0)).r;float g=texture2D(tex0,suv+vec2(distort,0.0)).g;float b=texture2D(tex0,suv+vec2(distort-0.006,0.0)).b;vec3 col=vec3(r,g,b);col+=vec3(0.10,0.28,0.55)*abs(distort)*9.0;float edge=smoothstep(0.0,0.12,vTexCoord.y)*smoothstep(1.0,0.88,vTexCoord.y);gl_FragColor=vec4(col,edge*0.92);}';
+var hp=null,vid=null,rbSh=null,handsRaw=[],handsSmoothed=[],NC=40,nodes=[],ready=false,stEl=null;
+function ss(s){if(stEl)stEl.textContent=s;}
+function coverRect(vw,vh,cw,ch){var s=Math.max(cw/vw,ch/vh);return{w:vw*s,h:vh*s};}
+function m2s(x,y,vw,vh,dw,dh){return createVector((x/vw-0.5)*dw,(y/vh-0.5)*dh,0);}
+function initNodes(){nodes=[];for(var i=0;i<NC;i++)nodes.push({pos:createVector(0,0,0),old:createVector(0,0,0),pinned:false});}
+function updSmooth(dt){
+  var a=1.0-Math.pow(0.7,dt*60.0);
+  var vw=vid&&vid.elt&&vid.elt.videoWidth?vid.elt.videoWidth:640;
+  var obs=(handsRaw||[]).filter(function(h){return h&&h.keypoints&&h.keypoints.length>=21;}).map(function(h){var w=h.keypoints[0];return{h:h,s:h.handedness||(w.x<vw*0.5?'Left':'Right')};}).sort(function(a,b){return a.s<b.s?-1:1;});
+  if(handsSmoothed.length!==obs.length){handsSmoothed=obs.map(function(o){return{kp:o.h.keypoints.map(function(k){return{x:k.x,y:k.y};})};});return;}
+  for(var i=0;i<obs.length;i++){var src=obs[i].h,dst=handsSmoothed[i];for(var j=0;j<21;j++){var k=src.keypoints[j],kk=dst.kp[j];kk.x+=(k.x-kk.x)*a;kk.y+=(k.y-kk.y)*a;}}
+}
+function intNodes(dt){var gv=createVector(0,0.8*dt*60,0);for(var i=0;i<NC;i++){var n=nodes[i];if(n.pinned){n.old.set(n.pos);continue;}var vx=(n.pos.x-n.old.x)*0.92,vy=(n.pos.y-n.old.y)*0.92;n.old.set(n.pos);n.pos.x+=vx;n.pos.y+=vy;n.pos.add(gv);}}
+function solveCon(its,rl){for(var k=0;k<its;k++){for(var i=0;i<NC-1;i++){var n1=nodes[i],n2=nodes[i+1],dx=n2.pos.x-n1.pos.x,dy=n2.pos.y-n1.pos.y,d2=dx*dx+dy*dy;if(d2<1e-4)continue;var d=Math.sqrt(d2),diff=(d-rl)/d,ox=dx*0.5*diff,oy=dy*0.5*diff;if(!n1.pinned){n1.pos.x+=ox;n1.pos.y+=oy;}if(!n2.pinned){n2.pos.x-=ox;n2.pos.y-=oy;}}}}
+function setup(){createCanvas(windowWidth,windowHeight,WEBGL);pixelDensity(1);noStroke();textureMode(NORMAL);stEl=document.getElementById('st');}
+function draw(){
+  if(!ready||!vid||!vid.elt||vid.elt.readyState<2)return;
+  var dt=constrain(deltaTime/1000,1/120,1/15);
+  var vw=vid.elt.videoWidth||640,vh=vid.elt.videoHeight||480;
+  var cov=coverRect(vw,vh,width,height),dw=cov.w,dh=cov.h;
+  updSmooth(dt);
+  resetShader();background(0);
+  push();translate(0,0,-800);scale(-1,1,1);texture(vid);plane(dw,dh);pop();
+  var tA=null,tB=null;
+  if(handsSmoothed.length>0){var h1=handsSmoothed[0];tA=m2s((h1.kp[4].x+h1.kp[8].x)*0.5,(h1.kp[4].y+h1.kp[8].y)*0.5,vw,vh,dw,dh);}
+  if(handsSmoothed.length>1){var h2=handsSmoothed[1];tB=m2s((h2.kp[4].x+h2.kp[8].x)*0.5,(h2.kp[4].y+h2.kp[8].y)*0.5,vw,vh,dw,dh);}
+  if(tA){nodes[0].pos.set(tA);nodes[0].old.set(tA);nodes[0].pinned=true;}else{nodes[0].pinned=false;}
+  if(tB){nodes[NC-1].pos.set(tB);nodes[NC-1].old.set(tB);nodes[NC-1].pinned=true;}else{nodes[NC-1].pinned=false;}
+  intNodes(dt);solveCon(10,15);
+  shader(rbSh);rbSh.setUniform('tex0',vid);rbSh.setUniform('uTime',millis()/1000);
+  var gl2=drawingContext;gl2.enable(gl2.BLEND);gl2.blendFunc(gl2.SRC_ALPHA,gl2.ONE_MINUS_SRC_ALPHA);gl2.disable(gl2.DEPTH_TEST);
+  beginShape(TRIANGLE_STRIP);
+  for(var i=0;i<NC-1;i++){var p0=nodes[i].pos,p1=nodes[i+1].pos,ddx=p1.x-p0.x,ddy=p1.y-p0.y,d=Math.max(0.0001,Math.sqrt(ddx*ddx+ddy*ddy)),tx=ddx/d,ty=ddy/d,nx=-ty,ny=tx,u=i/(NC-1),w2=(28+(0.5+0.5*Math.sin(i*0.55+millis()*0.006))*16);vertex(p0.x-nx*w2,p0.y-ny*w2,0,u,0);vertex(p0.x+nx*w2,p0.y+ny*w2,0,u,1);}
+  endShape();gl2.enable(gl2.DEPTH_TEST);
+  if(frameCount%30===0)ss(handsSmoothed.length>0?handsSmoothed.length+' hand(s) · Ribbon active':'Hold hands up to stretch the ribbon');
+}
+function windowResized(){resizeCanvas(windowWidth,windowHeight);}
+async function startSketch(){
+  document.getElementById('ui').style.display='none';ss('Starting camera...');
+  try{
+    vid=createCapture({video:{facingMode:'user',width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30,max:30}},audio:false});
+    vid.elt.setAttribute('playsinline','');vid.elt.muted=true;vid.hide();
+    ss('Loading hand pose...');
+    await new Promise(function(res,rej){var t0=performance.now();(function tick(){if(vid.elt&&vid.elt.readyState>=2&&(vid.elt.videoWidth||0)>0)return res();if(performance.now()-t0>15000)return rej(new Error('timeout'));requestAnimationFrame(tick);})();});
+    hp=await ml5.handPose({flipped:true,maxHands:2});
+    hp.detectStart(vid,function(r){handsRaw=Array.isArray(r)?r:[];});
+    rbSh=createShader(VERT,FRAG);initNodes();ready=true;
+    ss('Hold hands up to stretch the ribbon');
+  }catch(e){ss('Error: '+e.message);}
+}
+</script></body></html>`
+
+const asciiCamHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.st{position:fixed;top:16px;right:16px;color:rgba(0,200,215,0.6);font-family:monospace;font-size:10px;letter-spacing:.08em}.ui{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.btn{padding:10px 26px;border:1px solid rgba(0,129,151,0.6);background:transparent;color:#00C8DC;font-family:monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.btn:hover{background:rgba(0,129,151,0.15)}.hint{color:rgba(0,200,215,0.35);font-family:monospace;font-size:10px;margin-top:10px}</style></head><body>
+<div class="label">Camera · ASCII Pixel · Teal</div>
+<div class="st" id="st">Initialising...</div>
+<div class="ui" id="ui"><button class="btn" onclick="startSketch()">Enable Camera</button><div class="hint">Live camera as teal pixel blocks</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script><script>
+var TEAL=['#000000','#000c0f','#001418','#002830','#004455','#008197','#00C8DC','#00E5F5'];
+var cam=null,camW=320,camH=240,sz=4,scX,scY,stEl=null;
+function setup(){
+  stEl=document.getElementById('st');
+  createCanvas(windowWidth,windowHeight);
+  pixelDensity(1);noStroke();
+  scX=width/camW;scY=height/camH;
+}
+function draw(){
+  if(!cam||cam.width===0)return;
+  cam.loadPixels();
+  if(!cam.pixels||cam.pixels.length===0)return;
+  background(0);
+  for(var y=0;y<camH;y+=sz){
+    for(var x=0;x<camW;x+=sz){
+      var mx=camW-1-x;
+      var idx=(y*camW+mx)*4;
+      var r=cam.pixels[idx],g=cam.pixels[idx+1],b=cam.pixels[idx+2];
+      var lum=(r*0.299+g*0.587+b*0.114)/255;
+      var ci=Math.min(TEAL.length-1,Math.floor(lum*(TEAL.length-0.01)));
+      fill(TEAL[ci]);
+      rect(x*scX,y*scY,sz*scX+1,sz*scY+1);
+    }
+  }
+}
+function windowResized(){resizeCanvas(windowWidth,windowHeight);scX=width/camW;scY=height/camH;}
+function startSketch(){
+  document.getElementById('ui').style.display='none';
+  cam=createCapture(VIDEO);cam.size(camW,camH);cam.hide();
+  stEl.textContent='Live · ASCII Pixel Mode';
+}
+</script></body></html>`
+
+const handEnergyHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.st{position:fixed;top:16px;right:16px;color:rgba(0,200,215,0.6);font-family:monospace;font-size:10px;letter-spacing:.08em}.ui{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.btn{padding:10px 26px;border:1px solid rgba(0,129,151,0.6);background:transparent;color:#00C8DC;font-family:monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.btn:hover{background:rgba(0,129,151,0.15)}.hint{color:rgba(0,200,215,0.35);font-family:monospace;font-size:10px;margin-top:10px}</style></head><body>
+<canvas id="c"></canvas>
+<div class="label">ML5 · Hand Energy · Hand Pose</div>
+<div class="st" id="st">Initialising...</div>
+<div class="ui" id="ui"><button class="btn" onclick="startCam()">Enable Camera</button><div class="hint">Camera · Hand Pose · ML5.js</div></div>
+<script src="https://unpkg.com/ml5@1.0.1/dist/ml5.min.js"></script><script>
+var C=document.getElementById('c'),ctx=C.getContext('2d');
+var W=C.width=innerWidth,H=C.height=innerHeight;
+window.addEventListener('resize',function(){W=C.width=innerWidth;H=C.height=innerHeight;});
+var video=null,hands=[],hp=null,pts=[],frame=0;
+var TIPS=[4,8,12,16,20];
+var CONNS=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+function setStatus(s){document.getElementById('st').textContent=s;}
+function startCam(){
+  document.getElementById('ui').style.display='none';
+  navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'},audio:false}).then(function(stream){
+    video=document.createElement('video');
+    video.srcObject=stream;video.autoplay=true;video.playsInline=true;video.muted=true;video.style.display='none';
+    document.body.appendChild(video);
+    video.play().catch(function(){});
+    setStatus('Loading hand pose model...');
+    hp=ml5.handPose({flipped:true});
+    hp.detectStart(video,function(r){hands=r;});
+    setStatus('Hold up your hands');
+    render();
+  }).catch(function(e){setStatus('Camera error: '+e.message);});
+}
+function mapX(x,vw,dw,dx){return dx+(x/vw)*dw;}
+function mapY(y,vh,dh,dy){return dy+(y/vh)*dh;}
+function render(){
+  requestAnimationFrame(render);frame++;
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  if(video&&video.readyState>=2){
+    var vw=video.videoWidth||640,vh=video.videoHeight||480;
+    var sc=Math.max(W/vw,H/vh),dw=vw*sc,dh=vh*sc,dx=(W-dw)/2,dy=(H-dh)/2;
+    var sw=dw/vw,sh=dh/vh;
+    ctx.save();ctx.translate(W,0);ctx.scale(-1,1);ctx.globalAlpha=0.2;ctx.drawImage(video,dx,dy,dw,dh);ctx.globalAlpha=1;ctx.restore();
+    ctx.fillStyle='rgba(0,3,8,0.6)';ctx.fillRect(0,0,W,H);
+    for(var hi=0;hi<hands.length;hi++){
+      var hand=hands[hi],kp=hand.keypoints;
+      if(!kp||kp.length<21)continue;
+      var mx=mapX,my=mapY;
+      // Draw skeleton
+      ctx.strokeStyle='rgba(0,150,180,0.4)';ctx.lineWidth=1;
+      for(var ci=0;ci<CONNS.length;ci++){
+        var a=kp[CONNS[ci][0]],b=kp[CONNS[ci][1]];
+        ctx.beginPath();ctx.moveTo(mx(a.x,vw,dw,dx),my(a.y,vh,dh,dy));ctx.lineTo(mx(b.x,vw,dw,dx),my(b.y,vh,dh,dy));ctx.stroke();
+      }
+      // Draw joints
+      ctx.fillStyle='rgba(0,200,215,0.5)';
+      for(var ji=0;ji<kp.length;ji++){ctx.beginPath();ctx.arc(mx(kp[ji].x,vw,dw,dx),my(kp[ji].y,vh,dh,dy),2,0,Math.PI*2);ctx.fill();}
+      // Energy beams between fingertips
+      for(var ti=0;ti<TIPS.length;ti++){
+        for(var tj=ti+1;tj<TIPS.length;tj++){
+          var ta=kp[TIPS[ti]],tb=kp[TIPS[tj]];
+          var ax=mx(ta.x,vw,dw,dx),ay=my(ta.y,vh,dh,dy);
+          var bx=mx(tb.x,vw,dw,dx),by=my(tb.y,vh,dh,dy);
+          var dist=Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay));
+          if(dist<200){
+            var alpha=Math.max(0,(1-dist/200)*0.6);
+            var grad=ctx.createLinearGradient(ax,ay,bx,by);
+            grad.addColorStop(0,'rgba(0,200,215,'+alpha+')');
+            grad.addColorStop(0.5,'rgba(0,230,240,'+(alpha*1.4)+')');
+            grad.addColorStop(1,'rgba(0,200,215,'+alpha+')');
+            ctx.strokeStyle=grad;ctx.lineWidth=1;
+            ctx.shadowBlur=12;ctx.shadowColor='#00C8DC';
+            ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+            ctx.shadowBlur=0;
+            if(Math.random()<0.15){var t2=Math.random();pts.push({x:ax+(bx-ax)*t2,y:ay+(by-ay)*t2,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*1.5-0.3,life:1,sz:Math.random()*2+0.5});}
+          }
+        }
+      }
+      // Bright fingertip dots
+      ctx.shadowBlur=16;ctx.shadowColor='#00C8DC';
+      for(var ti2=0;ti2<TIPS.length;ti2++){
+        var tp=kp[TIPS[ti2]];
+        ctx.fillStyle='rgba(0,230,245,0.9)';
+        ctx.beginPath();ctx.arc(mx(tp.x,vw,dw,dx),my(tp.y,vh,dh,dy),4,0,Math.PI*2);ctx.fill();
+      }
+      ctx.shadowBlur=0;
+    }
+    setStatus(hands.length>0?'Hand energy · '+hands.length+' hand'+(hands.length>1?'s':''):'Hold up your hands');
+  }
+  for(var pi=pts.length-1;pi>=0;pi--){var pt=pts[pi];pt.x+=pt.vx;pt.y+=pt.vy;pt.vy-=0.015;pt.life-=0.02;if(pt.life<=0){pts.splice(pi,1);continue;}ctx.globalAlpha=pt.life*0.7;ctx.fillStyle='#00C8DC';ctx.beginPath();ctx.arc(pt.x,pt.y,pt.sz*pt.life,0,Math.PI*2);ctx.fill();}
+  ctx.globalAlpha=1;
+  ctx.fillStyle='rgba(0,100,120,0.02)';for(var sy=0;sy<H;sy+=3)ctx.fillRect(0,sy,W,1);
+  var vg=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H*.85);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,5,12,0.65)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+}
+ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+ctx.strokeStyle='rgba(0,129,151,0.07)';ctx.lineWidth=1;
+for(var gx=0;gx<W;gx+=44){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+for(var gy=0;gy<H;gy+=44){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+ctx.fillStyle='rgba(0,200,215,0.25)';ctx.font='11px monospace';ctx.textAlign='center';
+ctx.fillText('ENABLE CAMERA TO ACTIVATE HAND TRACKING',W/2,H/2);
 </script></body></html>`
 
 export const demos: Demo[] = [
@@ -715,13 +984,13 @@ export const demos: Demo[] = [
   {
     id: 'camera-vision',
     title: 'Camera Vision',
-    description: 'Live camera feed with real-time WebGL color grading and AI face detection via BlazeFace. Three visual effects: Teal, Night Vision, Holographic.',
+    description: 'Live camera feed with ML5.js face mesh tracking — 468 landmarks mapped in real time. Full wireframe face with squiggly eye/brow contours and floating particles.',
     category: 'camera',
-    tech: 'Camera / TF.js',
+    tech: 'ML5 / FaceMesh',
     thumbnail: 'from-[#000d10] via-[#001a20] to-[#002d36]',
     camera: true,
     html: cameraHtml,
-    hint: 'Click "Enable Camera" — then cycle effects',
+    hint: 'Click "Enable Camera" — face mesh activates automatically',
   },
   {
     id: 'void-tunnel',
@@ -780,5 +1049,49 @@ export const demos: Demo[] = [
     camera: true,
     html: liquidBallHtml,
     hint: 'Enable camera · Hold both hands up · Squeeze to compress',
+  },
+  {
+    id: 'ribbon-warp',
+    title: 'Ribbon Warp',
+    description: 'ML5.js hand pose drives a Verlet-physics ribbon between your pinched fingers. The band uses a GLSL distortion shader with chromatic aberration and noise warping.',
+    category: 'ai-ml',
+    tech: 'ML5 / HandPose',
+    thumbnail: 'from-[#000510] via-[#001025] to-[#001a40]',
+    camera: true,
+    html: ribbonWarpHtml,
+    hint: 'Enable camera · Pinch thumb + index on each hand · Ribbon connects them',
+  },
+  {
+    id: 'ascii-teal',
+    title: 'ASCII Pixel',
+    description: 'Your live camera feed quantised into a teal pixel-block grid. Eight brightness levels map to eight tones — from deep black to electric cyan.',
+    category: 'camera',
+    tech: 'p5.js / Camera',
+    thumbnail: 'from-[#000a0a] via-[#001a20] to-[#003040]',
+    camera: true,
+    html: asciiCamHtml,
+    hint: 'Enable camera · Move closer or farther for more detail',
+  },
+  {
+    id: 'neural-ripple',
+    title: 'Neural Ripple',
+    description: 'ML5.js hand pose feeds into a GLSL ripple shader. Open your palm and circular waves propagate across the live camera feed with chromatic aberration.',
+    category: 'ai-ml',
+    tech: 'ML5 / HandPose',
+    thumbnail: 'from-[#000810] via-[#001020] to-[#001e35]',
+    camera: true,
+    html: neuralRippleHtml,
+    hint: 'Enable camera · Open your palm to launch ripples',
+  },
+  {
+    id: 'hand-energy',
+    title: 'Hand Energy',
+    description: 'ML5.js hand pose detection maps 21 landmarks in real time. Energy beams form between your fingertips — the closer they get, the brighter the arc.',
+    category: 'ai-ml',
+    tech: 'ML5 / HandPose',
+    thumbnail: 'from-[#000a10] via-[#001a25] to-[#002d40]',
+    camera: true,
+    html: handEnergyHtml,
+    hint: 'Enable camera · Hold hands up · Bring fingertips close',
   },
 ]

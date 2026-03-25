@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { demos, Demo } from './demos'
 
-const categories = ['all', 'shader', 'generative', 'interactive', 'camera'] as const
+const categories = ['all', 'shader', 'generative', 'interactive', 'camera', 'ai-ml'] as const
 type Category = typeof categories[number]
 
 const categoryLabels: Record<string, string> = {
@@ -13,6 +13,7 @@ const categoryLabels: Record<string, string> = {
   generative: 'Generative',
   interactive: 'Interactive',
   camera: 'Camera / AR',
+  'ai-ml': 'A.I. / ML',
 }
 
 const techColors: Record<string, string> = {
@@ -24,6 +25,8 @@ const techColors: Record<string, string> = {
   'p5.js / Camera': '#00C8DC',
   'p5.js / Optical Flow': '#00C8DC',
   'MediaPipe / Canvas': '#00D4AA',
+  'ML5 / HandPose': '#00E5BB',
+  'ML5 / FaceMesh': '#00E5BB',
 }
 
 export default function VisualStudio() {
@@ -87,40 +90,75 @@ export default function VisualStudio() {
 
 function DemoCard({ demo }: { demo: Demo }) {
   const router = useRouter()
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [thumbSrc, setThumbSrc] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (demo.camera) return // camera demos need permission — no auto preview
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setThumbSrc(`/api/visuals/${demo.id}`)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '150px', threshold: 0.1 }
+    )
+    if (cardRef.current) observer.observe(cardRef.current)
+    return () => observer.disconnect()
+  }, [demo.id, demo.camera])
 
   return (
     <div
+      ref={cardRef}
       onClick={() => router.push(`/visuals/${demo.id}`)}
       className="group relative cursor-pointer border border-white/5 hover:border-[#008197]/30 bg-[#0B0F1A] transition-all duration-300 overflow-hidden"
     >
       {/* Thumbnail */}
-      <div className={`h-52 bg-gradient-to-br ${demo.thumbnail} relative overflow-hidden`}>
+      <div className="h-52 relative overflow-hidden bg-black">
+        {/* Gradient bg — always present, fades behind live preview */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${demo.thumbnail} transition-opacity duration-700 ${thumbSrc ? 'opacity-0' : 'opacity-100'}`} />
+
         {/* Grid overlay */}
-        <div className="absolute inset-0 opacity-20"
+        <div
+          className="absolute inset-0 z-[1] opacity-20 pointer-events-none"
           style={{ backgroundImage: 'linear-gradient(rgba(0,129,151,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,129,151,0.3) 1px, transparent 1px)', backgroundSize: '32px 32px' }}
         />
+
+        {/* Live preview iframe (non-camera demos, lazy-loaded) */}
+        {thumbSrc && (
+          <iframe
+            src={thumbSrc}
+            className="absolute top-0 left-0 border-0 pointer-events-none"
+            style={{ width: '1280px', height: '720px', transform: 'scale(0.29)', transformOrigin: 'top left' }}
+            title=""
+            tabIndex={-1}
+          />
+        )}
+
         {/* Play button */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="w-14 h-14 border border-white/20 flex items-center justify-center group-hover:border-[#008197] group-hover:bg-[#008197]/10 transition-all duration-300 backdrop-blur-sm">
             <svg className="w-5 h-5 text-white/60 group-hover:text-[#00C8DC] transition-colors ml-0.5" viewBox="0 0 24 24" fill="currentColor">
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
           </div>
         </div>
+
         {/* Camera badge */}
         {demo.camera && (
-          <span className="absolute top-3 left-3 px-2 py-0.5 bg-black/60 border border-[#008197]/40 text-[#00C8DC] text-[9px] uppercase tracking-widest">
-            ● AR
+          <span className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-black/60 border border-[#008197]/40 text-[#00C8DC] text-[9px] uppercase tracking-widest">
+            ● CAM
           </span>
         )}
         {/* Controls badge */}
         {demo.controls && demo.controls.length > 0 && (
-          <span className="absolute bottom-3 right-3 px-2 py-0.5 bg-black/60 border border-white/10 text-slate-500 text-[9px] uppercase tracking-widest">
+          <span className="absolute bottom-3 right-3 z-10 px-2 py-0.5 bg-black/60 border border-white/10 text-slate-500 text-[9px] uppercase tracking-widest">
             ⚙ Controls
           </span>
         )}
         {/* Tech badge */}
-        <span className="absolute top-3 right-3 px-2 py-0.5 bg-black/60 border border-white/10 text-slate-400 text-[9px] uppercase tracking-widest">
+        <span className="absolute top-3 right-3 z-10 px-2 py-0.5 bg-black/60 border border-white/10 text-slate-400 text-[9px] uppercase tracking-widest">
           {demo.tech}
         </span>
       </div>
