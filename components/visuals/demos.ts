@@ -1,3 +1,14 @@
+export interface DemoControl {
+  id: string
+  label: string
+  type: 'range' | 'toggle'
+  min?: number
+  max?: number
+  step?: number
+  default: number | boolean
+  unit?: string
+}
+
 export interface Demo {
   id: string
   title: string
@@ -7,6 +18,8 @@ export interface Demo {
   thumbnail: string
   camera: boolean
   html: string
+  hint?: string
+  controls?: DemoControl[]
 }
 
 const plasmaHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}body{background:#000;overflow:hidden}canvas{display:block}.label{position:fixed;bottom:16px;left:16px;color:rgba(0,200,215,0.5);font-family:monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}</style></head><body><canvas id="c"></canvas><div class="label">GLSL · Teal Plasma · Move cursor to warp</div><script>
@@ -625,6 +638,10 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#001418] via-[#003d4a] to-[#008197]',
     camera: false,
     html: plasmaHtml,
+    hint: 'Move cursor to warp the plasma field',
+    controls: [
+      { id: 'speed', label: 'Speed', type: 'range', min: 0.1, max: 3, step: 0.1, default: 1, unit: '×' },
+    ],
   },
   {
     id: 'particle-storm',
@@ -635,6 +652,10 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000d10] via-[#002a33] to-[#005f73]',
     camera: false,
     html: particleHtml,
+    hint: 'Move cursor to orbit the particle cloud',
+    controls: [
+      { id: 'speed', label: 'Speed', type: 'range', min: 0.1, max: 3, step: 0.1, default: 1, unit: '×' },
+    ],
   },
   {
     id: 'neural-flow',
@@ -645,6 +666,7 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000810] via-[#001f28] to-[#00414F]',
     camera: false,
     html: flowHtml,
+    hint: 'Move cursor to bend the flow field',
   },
   {
     id: 'void-portal',
@@ -655,6 +677,10 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000508] via-[#001520] to-[#003346]',
     camera: false,
     html: voidHtml,
+    hint: 'Move cursor to orbit the structure',
+    controls: [
+      { id: 'speed', label: 'Rotation Speed', type: 'range', min: 0.1, max: 3, step: 0.1, default: 1, unit: '×' },
+    ],
   },
   {
     id: 'camera-vision',
@@ -665,6 +691,7 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000d10] via-[#001a20] to-[#002d36]',
     camera: true,
     html: cameraHtml,
+    hint: 'Click "Enable Camera" — then cycle effects',
   },
   {
     id: 'void-tunnel',
@@ -675,6 +702,7 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000005] via-[#001a00] to-[#003300]',
     camera: false,
     html: voidTunnelHtml,
+    hint: 'Mouse X = twist · Mouse Y = speed',
   },
   {
     id: 'accretion',
@@ -685,6 +713,10 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#050005] via-[#1a0030] to-[#300050]',
     camera: false,
     html: accretionHtml,
+    hint: 'GPU fractal nebula — just watch',
+    controls: [
+      { id: 'speed', label: 'Speed', type: 'range', min: 0.1, max: 3, step: 0.1, default: 1, unit: '×' },
+    ],
   },
   {
     id: 'squiggle-cam',
@@ -695,6 +727,7 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000a0a] via-[#001520] to-[#002030]',
     camera: true,
     html: squiggleCamHtml,
+    hint: 'Click "Start Camera" — move in front of the lens',
   },
   {
     id: 'optical-flow',
@@ -705,6 +738,7 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000308] via-[#000d20] to-[#001530]',
     camera: true,
     html: opticalFlowHtml,
+    hint: 'Wave your hands in front of the camera',
   },
   {
     id: 'liquid-ball',
@@ -715,5 +749,6 @@ export const demos: Demo[] = [
     thumbnail: 'from-[#000810] via-[#001525] to-[#002535]',
     camera: true,
     html: liquidBallHtml,
+    hint: 'Enable camera · Hold both hands up · Squeeze to compress',
   },
 ]
