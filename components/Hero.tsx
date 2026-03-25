@@ -112,7 +112,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
 
       {/* Background gradients */}
@@ -127,7 +127,7 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
         {/* Main heading */}
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.05] tracking-tight mb-6">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.05] tracking-tight mb-6">
           Reimagining How
           <br />
           <span className="holographic">Businesses Interact</span>
@@ -143,7 +143,7 @@ export default function Hero() {
         </p>
 
         {/* CTA buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
           <a
             href="#booking"
             className="inline-flex items-center gap-3 px-8 py-3.5 border border-white/80 text-white text-xs font-semibold tracking-[0.25em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
@@ -151,17 +151,6 @@ export default function Hero() {
             Book A Free Strategy Call
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-          <a
-            href="https://www.euclideonme.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-3.5 border border-white/30 text-white/70 text-xs font-semibold tracking-[0.25em] uppercase hover:border-white/70 hover:text-white transition-all duration-300"
-          >
-            Explore Holographic Tech
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
             </svg>
           </a>
         </div>
@@ -180,10 +169,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator — no glitch */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
-        <span className="text-xs text-slate-500 uppercase tracking-widest">Scroll</span>
-        <div className="w-px h-12 bg-gradient-to-b from-slate-500 to-transparent" />
+      {/* Scroll indicator */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 opacity-60">
+        <span className="text-[10px] text-slate-400 uppercase tracking-[0.25em]">Scroll</span>
+        <div className="w-px h-8 bg-gradient-to-b from-slate-400 to-transparent" />
       </div>
     </section>
   )

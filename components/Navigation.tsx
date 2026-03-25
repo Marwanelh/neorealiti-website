@@ -73,15 +73,7 @@ export default function Navigation() {
               ))}
             </nav>
 
-            {/* CTA */}
-            <div className="hidden lg:flex items-center gap-4">
-              <a
-                href="#booking"
-                className="px-5 py-2.5 border border-white/70 text-white text-xs font-semibold tracking-[0.2em] uppercase hover:bg-white hover:text-[#07080F] transition-all duration-300"
-              >
-                Book a Meeting
-              </a>
-            </div>
+
 
             {/* Mobile menu button */}
             <button
@@ -116,13 +108,7 @@ export default function Navigation() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#booking"
-            onClick={() => setMenuOpen(false)}
-            className="mt-4 px-6 py-4 border border-white/70 text-white text-sm font-semibold tracking-[0.2em] uppercase text-center hover:bg-white hover:text-[#07080F] transition-all duration-300"
-          >
-            Book a Meeting
-          </a>
+
         </nav>
       </div>
     </>
