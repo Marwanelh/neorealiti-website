@@ -1,11 +1,11 @@
 import { demos } from '@/components/visuals/demos'
 import { NextResponse } from 'next/server'
 
-// Injected into every demo — provides pause/resume/reset/speed controls via postMessage
+// Full control bridge for non-camera demos — pause/resume/speed/reset via postMessage
 const CONTROL_BRIDGE = `
 <script>
 (function(){
-  /* Neo Control Bridge v1 */
+  /* Neo Control Bridge v2 */
   var _raf = window.requestAnimationFrame.bind(window);
   var _dn  = Date.now.bind(Date);
 
@@ -13,15 +13,16 @@ const CONTROL_BRIDGE = `
   var speed   = 1;
   var pending = [];
 
-  /* Accumulated virtual time for Date.now override (affects GLSL demos) */
-  var acc = 0, last = _dn();
+  /* Fixed virtual-time accumulator — advances at speed× real time */
+  var vt = _dn(), prevReal = _dn();
   Date.now = function(){
-    var real = _dn(), d = real - last; last = real;
-    if (!paused) acc += d * speed;
-    return last - d + acc; /* virtual now */
+    var r = _dn();
+    if (!paused) vt += (r - prevReal) * speed;
+    prevReal = r;
+    return vt;
   };
 
-  /* rAF interception for pause (affects all animation loops) */
+  /* rAF interception for pause */
   window.requestAnimationFrame = function(fn){
     if (paused){ pending.push(fn); return 0; }
     return _raf(fn);
@@ -38,16 +39,30 @@ const CONTROL_BRIDGE = `
     if (d.paused  !== undefined){ var was=paused; paused=d.paused; if(was&&!paused) resume(); }
     if (d.speed   !== undefined) speed = d.speed;
     if (d.reset)                 location.reload();
-    /* Demo-specific control values stored on window.__neo_ctrl */
     if (d.ctrl) Object.assign(window.__neo_ctrl, d.ctrl);
   });
 
-  /* Expose state for demos that want to read it */
   window.__neo_ctrl = {};
   window.__neo = {
     get paused(){ return paused; },
     get speed(){  return speed; },
   };
+})();
+</script>
+`
+
+// Minimal bridge for camera/ML demos — no RAF/Date.now override that breaks MediaPipe/ML5
+const CAMERA_BRIDGE = `
+<script>
+(function(){
+  /* Neo Camera Bridge — reset only, no timing overrides */
+  window.addEventListener('message', function(e){
+    if (!e.data || e.data._src !== 'neo') return;
+    if (e.data.reset) location.reload();
+    if (e.data.ctrl) Object.assign(window.__neo_ctrl||{}, e.data.ctrl);
+  });
+  window.__neo_ctrl = {};
+  window.__neo = { paused: false, speed: 1 };
 })();
 </script>
 `
@@ -61,10 +76,13 @@ export async function GET(
     return new NextResponse('Demo not found', { status: 404 })
   }
 
-  // Inject control bridge before </body>
+  // Camera demos get a minimal bridge — no RAF/Date.now override that breaks ML5/MediaPipe
+  const bridge = demo.camera ? CAMERA_BRIDGE : CONTROL_BRIDGE
+
+  // Inject bridge before </body>
   const html = demo.html.includes('</body>')
-    ? demo.html.replace('</body>', CONTROL_BRIDGE + '</body>')
-    : demo.html + CONTROL_BRIDGE
+    ? demo.html.replace('</body>', bridge + '</body>')
+    : demo.html + bridge
 
   return new NextResponse(html, {
     headers: {

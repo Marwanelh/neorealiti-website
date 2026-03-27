@@ -31,7 +31,8 @@ const techColors: Record<string, string> = {
 
 export default function VisualStudio() {
   const [active, setActive] = useState<Category>('all')
-  const filtered = active === 'all' ? demos : demos.filter(d => d.category === active)
+  const visible = demos.filter(d => !d.hidden)
+  const filtered = active === 'all' ? visible : visible.filter(d => d.category === active)
 
   return (
     <>
