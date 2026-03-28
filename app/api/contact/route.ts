@@ -43,7 +43,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true, message: 'Message received!' })
-  } catch {
+  } catch (err) {
+    console.error('[contact]', err)
     return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })
   }
 }

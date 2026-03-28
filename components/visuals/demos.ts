@@ -591,7 +591,6 @@ document.getElementById('startBtn').addEventListener('click',function(){
     videoEl.srcObject=stream;videoEl.autoplay=true;videoEl.playsInline=true;videoEl.muted=true;
     videoEl.style.display='none';document.body.appendChild(videoEl);
     videoEl.play().catch(function(){});
-    videoEl.addEventListener('loadedmetadata',function(){setStatus('Camera: '+videoEl.videoWidth+'\xd7'+videoEl.videoHeight+' \u2022 Loading MediaPipe\u2026');});
     setStatus('Loading MediaPipe...');
     var hands=new Hands({locateFile:function(f){return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/'+f;}});
     hands.setOptions({maxNumHands:2,modelComplexity:1,minDetectionConfidence:0.7,minTrackingConfidence:0.5});

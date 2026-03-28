@@ -60,7 +60,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true, message: 'Booking confirmed!' })
-  } catch {
+  } catch (err) {
+    console.error('[book]', err)
     return NextResponse.json({ error: 'Failed to confirm booking' }, { status: 500 })
   }
 }

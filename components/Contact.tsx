@@ -82,7 +82,7 @@ export default function Contact() {
           </div>
           <h2 className="text-4xl lg:text-5xl xl:text-6xl font-black mb-6">
             Technologies for{' '}
-            <span className="gradient-text">Forward Thinking</span>
+            <span className="fill-gradient-text">Forward Thinking</span>
             <br />
             Businesses
           </h2>
