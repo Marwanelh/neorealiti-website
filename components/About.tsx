@@ -92,11 +92,18 @@ export default function About() {
                 inspiring — with proven success to drive sales, raise awareness, and grow advocacy.
               </p>
             </div>
-            <div className="flex-shrink-0">
-              <div className="p-5 rounded-2xl bg-[#07080F]/60 border border-[#1C1F35] text-center min-w-[120px]">
-                <div className="text-2xl font-black gradient-text mb-1">🇴🇲</div>
-                <div className="text-xs text-slate-500">Based in Oman</div>
-              </div>
+            <div className="flex-shrink-0 grid grid-cols-2 gap-4">
+              {[
+                { label: 'Years of Innovation', value: '5+' },
+                { label: 'Projects Delivered', value: '50+' },
+                { label: 'Industries Served', value: '8+' },
+                { label: 'Based in Oman', value: '🇴🇲' },
+              ].map((s) => (
+                <div key={s.label} className="p-5 rounded-2xl bg-[#07080F]/60 border border-[#1C1F35] text-center min-w-[120px]">
+                  <div className="text-2xl font-black gradient-text mb-1">{s.value}</div>
+                  <div className="text-xs text-slate-500">{s.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
