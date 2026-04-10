@@ -7,8 +7,8 @@ const pillars = [
         <path d="M2 12l10 5 10-5" />
       </svg>
     ),
-    title: 'Holographic Reality',
-    desc: 'Delivering volumetric 3D displays and spatial computing experiences that go far beyond traditional screens.',
+    title: 'Creative Technology Consulting',
+    desc: 'We help organizations design, plan, and execute complex systems involving design, technology, interaction, and research.',
   },
   {
     icon: (
@@ -62,10 +62,10 @@ export default function NeoAbout() {
               Between Digital And Real.
             </h2>
             <p className="text-white/50 text-lg leading-relaxed mb-5">
-              We are an immersive technology company headquartered in Oman, building the bridge between digital innovation and real-world business impact. From bespoke holographic installations to AI-driven process automation, every solution we deliver is engineered for measurable results.
+              We are an immersive technology company headquartered in Oman, dedicated to bridging the gap between data driven interaction and real-world experiential impact. From bespoke Interactive installations to AI-driven process automation, every solution we deliver is engineered to provide measurable results for your business.
             </p>
             <p className="text-white/40 leading-relaxed">
-              Our multi-disciplinary team combines hardware expertise, software craftsmanship, and strategic consulting — so you get not just a product, but a competitive advantage.
+              Our multi-disciplinary team combines hardware expertise, software craftsmanship, deep research and strategic consulting — so you get not just a service, but a solution with competitive edge.
             </p>
 
             <div className="mt-10 flex gap-4">
