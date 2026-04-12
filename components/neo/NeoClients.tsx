@@ -3,13 +3,13 @@
 import Image from 'next/image'
 
 const clients = [
-  { name: 'Muriya', src: '/images/clients/muriya.png' },
-  { name: 'Oman Airports', src: '/images/clients/oman-airports-color.png' },
-  { name: 'Oman Data Park', src: '/images/clients/oman-datapark.png' },
-  { name: 'NRAA', src: '/images/clients/nraa.png' },
-  { name: 'TAISM', src: '/images/clients/taism.png' },
-  { name: 'MBRDI', src: '/images/clients/mbrdi.png' },
-  { name: 'Muscat Municipality', src: '/images/clients/muscat.png' },
+  { name: 'Muriya',              src: '/images/clients/muriya.png',             maxH: 40,  maxW: 140 },
+  { name: 'Oman Airports',       src: '/images/clients/oman-airports-color.png',maxH: 56,  maxW: 200 },
+  { name: 'Oman Data Park',      src: '/images/clients/oman-datapark.png',      maxH: 56,  maxW: 200 },
+  { name: 'NRAA',                src: '/images/clients/nraa.png',               maxH: 56,  maxW: 220 },
+  { name: 'TAISM',               src: '/images/clients/taism.png',              maxH: 80,  maxW: 120 },
+  { name: 'MBRDI',               src: '/images/clients/mbrdi.png',              maxH: 72,  maxW: 160 },
+  { name: 'Muscat Municipality', src: '/images/clients/muscat.png',             maxH: 88,  maxW: 120 },
 ]
 
 export default function NeoClients() {
@@ -32,14 +32,15 @@ export default function NeoClients() {
             {[...clients, ...clients].map((client, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 flex items-center justify-center h-28 px-16"
+                className="flex-shrink-0 flex items-center justify-center h-28 px-14"
               >
                 <Image
                   src={client.src}
                   alt={client.name}
                   width={280}
                   height={112}
-                  className="max-h-24 max-w-[260px] w-auto object-contain opacity-60 hover:opacity-100 hover:drop-shadow-[0_0_12px_rgba(0,200,220,0.3)] transition-all duration-500"
+                  className="w-auto object-contain opacity-60 hover:opacity-100 hover:drop-shadow-[0_0_12px_rgba(0,200,220,0.3)] transition-all duration-500"
+                  style={{ maxHeight: client.maxH, maxWidth: client.maxW }}
                 />
               </div>
             ))}
