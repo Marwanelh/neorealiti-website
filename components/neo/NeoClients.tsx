@@ -39,8 +39,7 @@ export default function NeoClients() {
                   alt={client.name}
                   width={280}
                   height={112}
-                  className="max-h-24 max-w-[260px] w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-500"
-                  style={{ filter: 'brightness(0) invert(1)' }}
+                  className="max-h-24 max-w-[260px] w-auto object-contain opacity-60 hover:opacity-100 hover:drop-shadow-[0_0_12px_rgba(0,200,220,0.3)] transition-all duration-500"
                 />
               </div>
             ))}
