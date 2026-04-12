@@ -9,7 +9,7 @@ const clients = [
   { name: 'Oman Airports', src: '/images/clients/oman-airports.png' },
   { name: 'TAISM', src: '/images/clients/taism.png' },
   { name: 'Oman Data Park', src: '/images/clients/oman-datapark.webp' },
-  { name: 'Client', src: '/images/clients/client7.webp' },
+  { name: 'Mercedes-Benz', src: '/images/clients/mercedes.png' },
 ]
 
 export default function NeoClients() {
@@ -40,6 +40,7 @@ export default function NeoClients() {
                   width={140}
                   height={56}
                   className="max-h-12 w-auto object-contain grayscale opacity-50 hover:opacity-90 hover:grayscale-0 transition-all duration-300"
+                  style={{ mixBlendMode: 'screen' }}
                 />
               </div>
             ))}
