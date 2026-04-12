@@ -3,13 +3,13 @@
 import Image from 'next/image'
 
 const clients = [
-  { name: 'Muriya',              src: '/images/clients/muriya.png',             maxH: 40,  maxW: 140 },
-  { name: 'Oman Airports',       src: '/images/clients/oman-airports-color.png',maxH: 56,  maxW: 200 },
-  { name: 'Oman Data Park',      src: '/images/clients/oman-datapark.png',      maxH: 56,  maxW: 200 },
-  { name: 'NRAA',                src: '/images/clients/nraa.png',               maxH: 56,  maxW: 220 },
-  { name: 'TAISM',               src: '/images/clients/taism.png',              maxH: 80,  maxW: 120 },
-  { name: 'MBRDI',               src: '/images/clients/mbrdi.png',              maxH: 72,  maxW: 160 },
-  { name: 'Muscat Municipality', src: '/images/clients/muscat.png',             maxH: 88,  maxW: 120 },
+  { name: 'Muriya',              src: '/images/clients/muriya.png',             maxH: 52,  maxW: 182 },
+  { name: 'Oman Airports',       src: '/images/clients/oman-airports-color.png',maxH: 73,  maxW: 260 },
+  { name: 'Oman Data Park',      src: '/images/clients/oman-datapark.png',      maxH: 73,  maxW: 260 },
+  { name: 'NRAA',                src: '/images/clients/nraa.png',               maxH: 73,  maxW: 286 },
+  { name: 'TAISM',               src: '/images/clients/taism.png',              maxH: 104, maxW: 156 },
+  { name: 'MBRDI',               src: '/images/clients/mbrdi.png',              maxH: 94,  maxW: 208 },
+  { name: 'Muscat Municipality', src: '/images/clients/muscat.png',             maxH: 114, maxW: 156 },
 ]
 
 export default function NeoClients() {
