@@ -32,17 +32,15 @@ export default function NeoClients() {
             {[...clients, ...clients].map((client, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 flex items-center justify-center h-24 px-16"
+                className="flex-shrink-0 flex items-center justify-center h-28 px-16"
               >
                 <Image
                   src={client.src}
                   alt={client.name}
-                  width={240}
-                  height={96}
-                  className="max-h-20 max-w-[220px] w-auto object-contain opacity-40 hover:opacity-100 transition-all duration-500"
+                  width={280}
+                  height={112}
+                  className="max-h-24 max-w-[260px] w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-500"
                   style={{ filter: 'brightness(0) invert(1)' }}
-                  onMouseEnter={e => (e.currentTarget.style.filter = 'none')}
-                  onMouseLeave={e => (e.currentTarget.style.filter = 'brightness(0) invert(1)')}
                 />
               </div>
             ))}
