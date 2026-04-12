@@ -3,13 +3,13 @@
 import Image from 'next/image'
 
 const clients = [
-  { name: 'Muriya',              src: '/images/clients/muriya.png',             maxH: 78,  maxW: 273 },
-  { name: 'Oman Airports',       src: '/images/clients/oman-airports-color.png',maxH: 110, maxW: 390 },
-  { name: 'Oman Data Park',      src: '/images/clients/oman-datapark.png',      maxH: 110, maxW: 390 },
-  { name: 'NRAA',                src: '/images/clients/nraa.png',               maxH: 110, maxW: 429 },
-  { name: 'TAISM',               src: '/images/clients/taism.png',              maxH: 156, maxW: 234 },
-  { name: 'MBRDI',               src: '/images/clients/mbrdi.png',              maxH: 141, maxW: 312 },
-  { name: 'Muscat Municipality', src: '/images/clients/muscat.png',             maxH: 171, maxW: 234 },
+  { name: 'Muriya',              src: '/images/clients/muriya.png',             maxH: 68,  maxW: 240 },
+  { name: 'Oman Airports',       src: '/images/clients/oman-airports-color.png',maxH: 88,  maxW: 320 },
+  { name: 'Oman Data Park',      src: '/images/clients/oman-datapark.png',      maxH: 88,  maxW: 320 },
+  { name: 'NRAA',                src: '/images/clients/nraa.png',               maxH: 88,  maxW: 340 },
+  { name: 'TAISM',               src: '/images/clients/taism.png',              maxH: 130, maxW: 190 },
+  { name: 'MBRDI',               src: '/images/clients/mbrdi.png',              maxH: 110, maxW: 240 },
+  { name: 'Muscat Municipality', src: '/images/clients/muscat.png',             maxH: 140, maxW: 190 },
 ]
 
 export default function NeoClients() {
@@ -32,15 +32,16 @@ export default function NeoClients() {
             {[...clients, ...clients].map((client, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 flex items-center justify-center h-28 px-14"
+                className="flex-shrink-0 flex items-center justify-center h-40 px-14"
               >
                 <Image
                   src={client.src}
                   alt={client.name}
-                  width={280}
-                  height={112}
+                  width={client.maxW * 2}
+                  height={client.maxH * 2}
+                  quality={100}
                   className="w-auto object-contain opacity-60 hover:opacity-100 hover:drop-shadow-[0_0_12px_rgba(0,200,220,0.3)] transition-all duration-500"
-                  style={{ maxHeight: client.maxH, maxWidth: client.maxW }}
+                  style={{ maxHeight: client.maxH, maxWidth: client.maxW, imageRendering: 'auto' }}
                 />
               </div>
             ))}
