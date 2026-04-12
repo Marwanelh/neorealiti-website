@@ -6,7 +6,7 @@ const clients = [
   { name: 'Muscat Municipality', src: '/images/clients/muscat.png' },
   { name: 'MBRDI', src: '/images/clients/mbrdi.png' },
   { name: 'NRAA', src: '/images/clients/nraa.png' },
-  { name: 'Oman Airports', src: '/images/clients/oman-airports.png' },
+  { name: 'Oman Airports', src: '/images/clients/oman-airports-color.png' },
   { name: 'TAISM', src: '/images/clients/taism.png' },
   { name: 'Oman Data Park', src: '/images/clients/oman-datapark.webp' },
   { name: 'Mercedes-Benz', src: '/images/clients/mercedes.png' },
@@ -20,26 +20,33 @@ export default function NeoClients() {
           Trusted by leading organizations across the region
         </p>
 
-        {/* Scrolling marquee */}
+        {/* Seamless scrolling marquee */}
         <div className="relative overflow-hidden">
           {/* Fade edges */}
-          <div className="absolute left-0 top-0 h-full w-24 z-10 pointer-events-none"
+          <div className="absolute left-0 top-0 h-full w-32 z-10 pointer-events-none"
             style={{ background: 'linear-gradient(to right, #07080F, transparent)' }} />
-          <div className="absolute right-0 top-0 h-full w-24 z-10 pointer-events-none"
+          <div className="absolute right-0 top-0 h-full w-32 z-10 pointer-events-none"
             style={{ background: 'linear-gradient(to left, #07080F, transparent)' }} />
 
-          <div className="flex gap-16 animate-marquee whitespace-nowrap">
+          {/*
+            Seamless loop: each item has px-10 (padding on both sides),
+            so spacing is symmetric at loop boundary. Translate -50% = exact one full set.
+          */}
+          <div
+            className="flex animate-marquee"
+            style={{ width: 'max-content' }}
+          >
             {[...clients, ...clients].map((client, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 flex items-center justify-center h-16 w-40"
+                className="flex-shrink-0 flex items-center justify-center h-16 px-10"
               >
                 <Image
                   src={client.src}
                   alt={client.name}
-                  width={140}
+                  width={160}
                   height={56}
-                  className="max-h-12 w-auto object-contain grayscale opacity-50 hover:opacity-90 hover:grayscale-0 transition-all duration-300"
+                  className="h-10 w-auto object-contain grayscale opacity-40 hover:opacity-100 hover:grayscale-0 transition-all duration-500"
                   style={{ mixBlendMode: 'screen' }}
                 />
               </div>

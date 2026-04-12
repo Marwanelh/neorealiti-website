@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 480" fill="none" stroke="#008197" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+
+  <!-- Holographic Displays -->
+  <g id="holographic-displays" transform="translate(12, 12)">
+    <title>Holographic Displays</title>
+    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+    <path d="M2 17l10 5 10-5" />
+    <path d="M2 12l10 5 10-5" />
+  </g>
+
+  <!-- Augmented & Mixed Reality -->
+  <g id="augmented-mixed-reality" transform="translate(72, 12)">
+    <title>Augmented &amp; Mixed Reality</title>
+    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+    <circle cx="12" cy="12" r="3" />
+  </g>
+
+  <!-- AI Process Automation -->
+  <g id="ai-process-automation" transform="translate(132, 12)">
+    <title>AI Process Automation</title>
+    <rect x="9" y="9" width="6" height="6" rx="1" />
+    <path d="M9 2v2m6-2v2M9 20v2m6-2v2M2 9h2m-2 6h2M20 9h2m-2 6h2" />
+  </g>
+
+  <!-- Digital Twin Solutions -->
+  <g id="digital-twin-solutions" transform="translate(192, 12)">
+    <title>Digital Twin Solutions</title>
+    <rect x="2" y="3" width="20" height="14" rx="2" />
+    <path d="M8 21h8m-4-4v4" />
+    <path d="M7 8h10M7 12h6" />
+  </g>
+
+  <!-- Immersive Retail Experiences -->
+  <g id="immersive-retail" transform="translate(12, 72)">
+    <title>Immersive Retail Experiences</title>
+    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+    <path d="M3 6h18" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+  </g>
+
+  <!-- VR Training Simulations -->
+  <g id="vr-training" transform="translate(72, 72)">
+    <title>VR Training Simulations</title>
+    <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" />
+    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+  </g>
+
+  <!-- Spatial Data Visualization -->
+  <g id="spatial-data" transform="translate(132, 72)">
+    <title>Spatial Data Visualization</title>
+    <path d="M3 3v18h18" />
+    <path d="M18 17V9M13 17V5M8 17v-3" />
+  </g>
+
+  <!-- Systems Integration -->
+  <g id="systems-integration" transform="translate(192, 72)">
+    <title>Systems Integration</title>
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </g>
+
+  <!-- Creative Technology Consulting -->
+  <g id="creative-tech-consulting" transform="translate(12, 132)">
+    <title>Creative Technology Consulting</title>
+    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+    <path d="M2 17l10 5 10-5" />
+    <path d="M2 12l10 5 10-5" />
+  </g>
+
+  <!-- AI Automation (About pillar) -->
+  <g id="ai-automation" transform="translate(72, 132)">
+    <title>AI Automation</title>
+    <rect x="9" y="9" width="6" height="6" rx="1" />
+    <path d="M9 9 7 7m8 2 2-2M9 15l-2 2m10-2 2 2" />
+    <path d="M9 2v2m6-2v2M9 20v2m6-2v2M2 9h2m-2 6h2M20 9h2m-2 6h2" />
+  </g>
+
+  <!-- Immersive Engagement (About pillar) -->
+  <g id="immersive-engagement" transform="translate(132, 132)">
+    <title>Immersive Engagement</title>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M2 12h20" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </g>
+
+  <!-- Regional Expertise (About pillar) -->
+  <g id="regional-expertise" transform="translate(192, 132)">
+    <title>Regional Expertise</title>
+    <path d="M20 10c0 6-8 13-8 13s-8-7-8-13a8 8 0 0 1 16 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </g>
+
+</svg>
