@@ -2,6 +2,7 @@ import BrandSwitcher from '@/components/BrandSwitcher'
 import NeoNavigation from '@/components/neo/NeoNavigation'
 import NeoHero from '@/components/neo/NeoHero'
 import NeoAbout from '@/components/neo/NeoAbout'
+import NeoClients from '@/components/neo/NeoClients'
 import NeoServices from '@/components/neo/NeoServices'
 import NeoVentures from '@/components/neo/NeoVentures'
 import NeoBookingCalendar from '@/components/neo/NeoBookingCalendar'
@@ -15,6 +16,7 @@ export default function Home() {
       <NeoNavigation />
       <NeoHero />
       <NeoAbout />
+      <NeoClients />
       <NeoServices />
       <NeoVentures />
       <NeoBookingCalendar />

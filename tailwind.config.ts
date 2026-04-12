@@ -47,6 +47,7 @@ const config: Config = {
         'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'scan': 'scan 3s linear infinite',
+        'marquee': 'marquee 30s linear infinite',
       },
       keyframes: {
         float: {
@@ -56,6 +57,10 @@ const config: Config = {
         scan: {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(100%)' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },
