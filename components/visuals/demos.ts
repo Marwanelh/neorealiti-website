@@ -1785,4 +1785,120 @@ export const demos: Demo[] = [
     hint: 'Drag to orbit · Scroll to zoom · Use panel to tweak erosion parameters',
     hidden: true,
     },
+
+  // ── VJ Sketches ──────────────────────────────────────────────────────────
+
+  {
+    id: 'dont-touch-me',
+    title: "Don't Touch Me",
+    description: 'Particles seek your cursor — survive as long as you can. Click to start. Avoid the swarm.',
+    category: 'interactive',
+    tech: 'p5.js · Particle Physics',
+    thumbnail: 'from-[#0a1228] via-[#1a2a5e] to-[#0a0a1a]',
+    camera: false,
+    hint: 'Click to start · Move your mouse to dodge particles',
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}body{background:#1B78A2}</style><script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"><\/script></head><body><script>
+var num=100,enemy_spawn_speed=180,score=0,best_score=0,pallete_size=10,life=true;
+var INTRO=0,PLAYING=1,DIED=2,game_state=INTRO;
+var particles=[];
+var BG='#1B78A2',PLAYER='#C0C0C0',ENEMIES='#FF9333',TEXTCOL='#FFFFFF';
+
+function setup(){createCanvas(windowWidth,windowHeight);smooth();noStroke();background(BG);}
+
+function draw(){
+  background(BG);
+  textAlign(CENTER);
+  textSize(48);
+  if(game_state===INTRO){
+    fill(TEXTCOL);text("Don't Touch Me!",width/2,height/2);
+    textSize(16);text("( Click to start )",width/2,height/2+36);
+  } else if(game_state===PLAYING){
+    fill(PLAYER);text(score,width/2,height/2);
+    textSize(16);text("Don't touch me!!!",width/2,height/2+36);
+    if(frameCount%enemy_spawn_speed===0&&life){
+      for(var i=0;i<particles.length;i++){
+        if(particles[i]===null){particles[i]=new Particle(createVector(random(width),random(height)),8,12,9);break;}
+      }
+    }
+    for(var i=0;i<particles.length;i++){if(particles[i]!==null)particles[i].run(mouseX,mouseY);}
+    drawPlayer();
+  } else if(game_state===DIED){
+    fill(ENEMIES);text(score,width/2,height/2);
+    textSize(16);text("( Oh you did! )",width/2,height/2+36);
+    if(score>best_score)best_score=score;
+    textSize(12);fill(PLAYER);textAlign(LEFT);text("Click to restart",10,height-10);
+  }
+  if(best_score>0){fill(PLAYER);textSize(10);textAlign(LEFT);text("Best: "+best_score,10,height-10);}
+}
+
+function mousePressed(){
+  if(game_state===INTRO){game_state=PLAYING;for(var i=0;i<num;i++)particles.push(null);particles[0]=new Particle(createVector(random(width),random(height)),8,12,9);}
+  else if(game_state===DIED){reset();game_state=INTRO;}
+}
+
+function drawPlayer(){
+  if(life&&game_state===PLAYING){
+    stroke(PLAYER);fill(PLAYER);ellipse(mouseX,mouseY,pallete_size,pallete_size);
+    stroke('#FFFFFF');noFill();ellipse(mouseX,mouseY,pallete_size*10,pallete_size*10);
+  } else {game_state=DIED;}
+}
+
+function reset(){life=true;score=0;particles=[];}
+
+function Particle(loc,sz,gravity,mass){
+  this.loc=loc.copy();this.vel=createVector(0,0);this.acc=createVector(0,0);
+  this.sz=sz;this.gravity=gravity;this.mass=mass;this.velocityLimit=10;
+  this.display=function(){fill(ENEMIES);stroke(ENEMIES);ellipse(this.loc.x,this.loc.y,this.sz,this.sz);};
+  this.forces=function(tx,ty){
+    var target=createVector(tx,ty),dir=p5.Vector.sub(this.loc,target);
+    var d=dir.mag();dir.normalize();
+    var force=(this.gravity*this.mass)/(d*d);
+    dir.mult(-1);this.applyForce(dir);
+    var ar=pow(this.loc.x-tx,2)+pow(this.loc.y-ty,2);
+    var cr0=pow(pallete_size/2,2),cr1=pow(pallete_size*5,2);
+    if(ar<=cr1&&ar>=cr0){score++;}else if(ar<cr0){life=false;}
+  };
+  this.applyForce=function(f){var fc=f.copy();fc.div(this.mass);this.acc.add(fc);};
+  this.update=function(){this.vel.add(this.acc);this.vel.limit(this.velocityLimit);this.loc.add(this.vel);this.acc.mult(0);};
+  this.bounds=function(){if(this.loc.y>height||this.loc.y<0)this.vel.y*=-1;if(this.loc.x>width||this.loc.x<0)this.vel.x*=-1;};
+  this.run=function(tx,ty){if(life)this.forces(tx,ty);this.display();this.bounds();this.update();};
+}
+<\/script></body></html>`,
+  },
+
+  {
+    id: 'color-boxes-3d',
+    title: 'Colour Boxes 3D',
+    description: 'Hundreds of colourful 3D boxes drift and rearrange in WebGL space. Move mouse to orbit, scroll to zoom, click to trigger new formations.',
+    category: 'generative',
+    tech: 'p5.js · WebGL · 3D',
+    thumbnail: 'from-[#cfc7b9] via-[#b8a99a] to-[#9e8b7a]',
+    camera: false,
+    hint: 'Move mouse to orbit · Scroll to zoom · Click to rearrange · Keys 0–4 change formation',
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}</style><script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"><\/script></head><body><script src="/visuals/color-boxes/randoms.js"><\/script><script src="/visuals/color-boxes/camera.js"><\/script><script src="/visuals/color-boxes/interaction.js"><\/script><script src="/visuals/color-boxes/mySketch.js"><\/script></body></html>`,
+  },
+
+  {
+    id: 'lunar-lander',
+    title: 'Lunar Lander',
+    description: 'Land your spacecraft on the moon surface. Manage fuel, fight gravity and wind. A physics-based survival challenge.',
+    category: 'interactive',
+    tech: 'p5.js · Physics · Game',
+    thumbnail: 'from-[#0a0a14] via-[#0f1a2e] to-[#0a0a14]',
+    camera: false,
+    hint: 'Arrow keys or WASD to thrust · R to restart · W to toggle wind · Z for zen mode',
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}</style><script src="https://cdn.jsdelivr.net/npm/p5@1.11.9/lib/p5.js"><\/script><script src="https://cdn.jsdelivr.net/gh/liabru/matter-js@0.18.0/build/matter.min.js"><\/script><script src="https://cdn.jsdelivr.net/npm/poly-decomp@0.2.1/build/decomp.min.js"><\/script></head><body><script src="/visuals/lunar-lander/mySketch.js"><\/script></body></html>`,
+  },
+
+  {
+    id: 'sound-reactive-art',
+    title: 'Sound Reactive Art',
+    description: 'Click to play music. Lines draw themselves around your cursor in sync with the audio, toggling between monochrome and vibrant colour.',
+    category: 'interactive',
+    tech: 'p5.js · p5.sound · Audio Reactive',
+    thumbnail: 'from-[#020202] via-[#0a0a0a] to-[#020202]',
+    camera: false,
+    hint: 'Click anywhere to start/stop music · Move cursor to draw · Colour toggles on click',
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}body{background:#0a0a0a}</style><script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"><\/script><script src="https://cdn.jsdelivr.net/npm/p5@v1.4.1/lib/addons/p5.sound.min.js"><\/script></head><body><script src="/visuals/sound-reactive/mySketch.js"><\/script></body></html>`,
+  },
 ]
