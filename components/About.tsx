@@ -95,7 +95,7 @@ export default function About() {
             <div className="flex-shrink-0 grid grid-cols-2 gap-4">
               {[
                 { label: 'Years of Innovation', value: '5+' },
-                { label: 'Projects Delivered', value: '50+' },
+                { label: 'Projects Delivered', value: '18+' },
                 { label: 'Industries Served', value: '8+' },
                 { label: 'Based in Oman', value: '🇴🇲' },
               ].map((s) => (

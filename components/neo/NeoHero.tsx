@@ -176,7 +176,7 @@ export default function NeoHero() {
           <div className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5">
             {[
               { value: '5+', label: 'Years of Innovation' },
-              { value: '50+', label: 'Projects Delivered' },
+              { value: '18+', label: 'Projects Delivered' },
               { value: '8+', label: 'Industries Served' },
               { value: '100%', label: 'Client Retention' },
             ].map(s => (
