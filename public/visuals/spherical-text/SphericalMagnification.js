@@ -42,7 +42,7 @@ var border = 80;
 
 var fontForChar = 'Arial';
 var fontForSpecialChar = 'Arial Black';
-var centersText = [' NEORELITI ', 'ANDY', 'ARTWORK', ' ART ', 'ManoylovAC', 'DREAMS', 'CREATIVE', 'CODING', ' PEACE ', 'WORLD', 'EARTH', 'OCEAN', 'UNIVERSE', ' KIEV ', 'HAPPINESS', 'CHANCE', 'UKRAINE', 'FUTURE', ' LOVE ', 'BLESSING', 'FAMILY', 'FRIENDS', 'FORTUNE' ];
+var centersText = [' NEOREALITI ', 'IMMERSIVE', 'ARTWORK', ' XR ', 'NEOREALITI', 'CREATIVE', 'TECHNOLOGY', 'VISION', ' OMAN ', 'WORLD', 'FUTURE', 'INTERACTIVE', 'HOLOGRAPHIC', ' STUDIO ', 'INNOVATION', 'EXPERIENCE', 'DIGITAL', 'REALITY', ' LIVE ', 'DESIGN', 'MOTION', 'DATA', 'SPATIAL' ];
 var textForRandomChars = [
   '観自在菩薩行深般若波羅蜜多時照見五蘊皆空度切苦厄舎利子色不異即是受想識亦復如諸法相生滅垢浄増減故中無眼耳鼻舌身意声香味触界乃至明尽老死集道智得以所提埵依罣礙有恐怖遠離顛倒夢究竟涅槃世仏阿耨藐知大神呪上等能除真実虚説羯諦僧婆訶経',
   'ABCDEFGHIJKLMNOPQRSTUVWXTZ',
@@ -54,8 +54,12 @@ var charsArr = [];
 var gridSurf;
 
 function setup() {
-  createCanvas(500, 500);
-  translate((windowWidth - width) / 2, (windowHeight - height) / 2);
+  createCanvas(windowWidth, windowHeight);
+  initSetupsForCharsGrid(20, 20, centersText[0], textForRandomChars[0]);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
   initSetupsForCharsGrid(20, 20, centersText[0], textForRandomChars[0]);
 }
 

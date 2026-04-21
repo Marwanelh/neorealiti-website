@@ -39,18 +39,21 @@ var counter = 0;
 
 
 function setup() {
-  // use full screen size 
-  createCanvas(780, 780);
+  createCanvas(windowWidth, windowHeight);
   background(255);
   smooth();
   cursor(CROSS);
- 
+
   x = mouseX;
   y = mouseY;
 
   textAlign(LEFT);
   fill(0);
+}
 
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  background(255);
 }
 
 function draw() {

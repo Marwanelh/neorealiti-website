@@ -1961,7 +1961,7 @@ function Particle(loc,sz,gravity,mass){
     thumbnail: 'from-[#050510] via-[#0a0a1e] to-[#050510]',
     camera: false,
     hint: 'Move mouse to warp the lens · Click and drag to change magnification · A/Z/X to randomise',
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}</style><script src="https://cdn.jsdelivr.net/npm/p5@0.5.11/lib/p5.min.js"><\/script></head><body><script src="/visuals/spherical-text/SphericalMagnification.js"><\/script><script src="/visuals/spherical-text/CharNode.js"><\/script><script src="/visuals/spherical-text/GridCorners.js"><\/script></body></html>`,
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}body{background:#eee}</style><script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"><\/script></head><body><script src="/visuals/spherical-text/SphericalMagnification.js"><\/script><script src="/visuals/spherical-text/CharNode.js"><\/script><script src="/visuals/spherical-text/GridCorners.js"><\/script></body></html>`,
   },
 
   {
