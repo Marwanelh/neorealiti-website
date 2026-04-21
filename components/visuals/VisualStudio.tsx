@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { demos, Demo } from './demos'
 
@@ -92,34 +92,27 @@ export default function VisualStudio() {
 
 function DemoCard({ demo }: { demo: Demo }) {
   const router = useRouter()
-  const cardRef = useRef<HTMLDivElement>(null)
   const [thumbSrc, setThumbSrc] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (demo.camera) return // camera demos need permission — no auto preview
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setThumbSrc(`/api/visuals/${demo.id}`)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: '150px', threshold: 0.1 }
-    )
-    if (cardRef.current) observer.observe(cardRef.current)
-    return () => observer.disconnect()
-  }, [demo.id, demo.camera])
+  function handleMouseEnter() {
+    if (!demo.camera) setThumbSrc(`/api/visuals/${demo.id}`)
+  }
+
+  function handleMouseLeave() {
+    setThumbSrc(null)
+  }
 
   return (
     <div
-      ref={cardRef}
       onClick={() => router.push(`/visuals/${demo.id}`)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className="group relative cursor-pointer border border-white/5 hover:border-[#008197]/30 bg-[#0B0F1A] transition-all duration-300 overflow-hidden"
     >
       {/* Thumbnail */}
       <div className="h-52 relative overflow-hidden bg-black">
-        {/* Gradient bg — always present, fades behind live preview */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${demo.thumbnail} transition-opacity duration-700 ${thumbSrc ? 'opacity-0' : 'opacity-100'}`} />
+        {/* Gradient bg — always present, fades out when live preview loads */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${demo.thumbnail} transition-opacity duration-500 ${thumbSrc ? 'opacity-0' : 'opacity-100'}`} />
 
         {/* Grid overlay */}
         <div
