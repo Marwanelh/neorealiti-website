@@ -65,13 +65,13 @@ async function preload() {
 		},
 	});
 	
-	imgCorazon = loadImage("corazon3d_v2.png");
-  imgCuerpo = loadImage("cuerpo.png");
-	imgOjos   = loadImage("ojos.png");
-	imgBuhoAnimado = loadImage("buho2.gif");
-	imgSplash = loadImage("splash.gif");
-	imgAmarillo = loadImage("amarillo.gif");
-	imgVerde = loadImage("verde.gif");
+	imgCorazon = loadImage("/visuals/hand-paint/corazon3d_v2.png");
+  imgCuerpo = loadImage("/visuals/hand-paint/cuerpo.png");
+	imgOjos   = loadImage("/visuals/hand-paint/ojos.png");
+	imgBuhoAnimado = loadImage("/visuals/hand-paint/buho2.gif");
+	imgSplash = loadImage("/visuals/hand-paint/splash.gif");
+	imgAmarillo = loadImage("/visuals/hand-paint/amarillo.gif");
+	imgVerde = loadImage("/visuals/hand-paint/verde.gif");
 	
 }
 
@@ -111,17 +111,20 @@ async function predictWebcam() {
 
 //------------------------------------------
 function setup() {
-	let myScale = 1.5;
-  createCanvas(800*myScale, 600*myScale);
+  createCanvas(windowWidth, windowHeight);
 	seed = random(1000);
 	strokeCap(ROUND);
 	ellipseMode(CENTER);
 	rectMode(CENTER);
 	imageMode(CENTER);
 	myCapture = createCapture(VIDEO);
-  myCapture.size(800*myScale,600*myScale);
+  myCapture.size(windowWidth, windowHeight);
 	myCapture.hide();
-	fill(0);	
+	fill(0);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {

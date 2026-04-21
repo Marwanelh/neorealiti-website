@@ -10,11 +10,11 @@ const metadata = {
 };
 
 function preload() {
-  font = loadFont("monaco.ttf");
-  colourMaps = loadJSON("colour-maps.json");
-  
-  loadStrings("vert.glsl", lines => vertShader = lines.join("\n"));
-  loadStrings("frag.glsl", lines => fragShader = lines.join("\n"));
+  font = loadFont("/visuals/fluvia/monaco.ttf");
+  colourMaps = loadJSON("/visuals/fluvia/colour-maps.json");
+
+  loadStrings("/visuals/fluvia/vert.glsl", lines => vertShader = lines.join("\n"));
+  loadStrings("/visuals/fluvia/frag.glsl", lines => fragShader = lines.join("\n"));
 }
 
 function setup() {

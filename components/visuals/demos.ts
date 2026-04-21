@@ -2021,7 +2021,7 @@ function Particle(loc,sz,gravity,mass){
     thumbnail: 'from-[#050a14] via-[#0a1428] to-[#050a14]',
     camera: true,
     hint: 'Allow camera access · Move your body to paint',
-    html: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.js"><\/script><script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/addons/p5.sound.min.js"><\/script><script src="https://unpkg.com/ml5@1/dist/ml5.min.js"><\/script><style>*{margin:0;padding:0;overflow:hidden}</style></head><body><script src="/visuals/body-pose/mySketch.js"><\/script></body></html>`,
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.js"><\/script><script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/addons/p5.sound.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"><\/script><script src="https://unpkg.com/ml5@1/dist/ml5.min.js"><\/script><style>*{margin:0;padding:0;overflow:hidden}</style></head><body><script src="/visuals/body-pose/mySketch.js"><\/script></body></html>`,
   },
 
   {
