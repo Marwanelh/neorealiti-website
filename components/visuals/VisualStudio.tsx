@@ -4,16 +4,18 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { demos, Demo } from './demos'
 
-const categories = ['all', 'shader', 'generative', 'interactive', 'camera', 'ai-ml'] as const
+const categories = ['all', 'gamification', 'interactive', 'ai-ml', 'xr', 'data-viz', 'digital-twin', 'lab'] as const
 type Category = typeof categories[number]
 
 const categoryLabels: Record<string, string> = {
   all: 'All',
-  shader: 'Shaders',
-  generative: 'Generative',
-  interactive: 'Interactive',
-  camera: 'Camera / AR',
-  'ai-ml': 'A.I. / ML',
+  gamification: 'Gamification',
+  interactive: 'Interactive Installation',
+  'ai-ml': 'AI / ML',
+  xr: 'XR',
+  'data-viz': 'Data Visualisation',
+  'digital-twin': 'Digital Twin',
+  lab: 'Lab',
 }
 
 const techColors: Record<string, string> = {
@@ -44,12 +46,11 @@ export default function VisualStudio() {
             Visual Studio
           </span>
           <h1 className="text-5xl lg:text-7xl font-black text-white leading-tight mb-6">
-            Immersive<br />
-            <span className="neo-gradient-text">Experiences</span>
+            Visual<br />
+            <span className="neo-gradient-text">Studio</span>
           </h1>
           <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
-            Real-time visuals built on GLSL shaders, Three.js, and generative algorithms.
-            This is the technology behind our installations and holographic displays.
+            Our expertise spans across experiential journeys, mixed reality applications, generative art installations, and interactive artworks. Our commitment to innovation drives us to explore the intersection of digital art, interactive design, and immersive storytelling.
           </p>
         </div>
 
