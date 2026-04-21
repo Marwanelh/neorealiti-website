@@ -25,7 +25,7 @@ let agent = [];
 
 function setup() {
   //createCanvas(1080, 608);
-	createCanvas(1000,1000);
+	createCanvas(windowWidth, windowHeight);
   colorMode(HSB, 360, 100, 100);
 	rectMode(CENTER);
   strokeCap(SQUARE);

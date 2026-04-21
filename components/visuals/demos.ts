@@ -1906,13 +1906,13 @@ function Particle(loc,sz,gravity,mass){
 
   {
     id: 'generative-lines',
-    title: 'Generative Lines',
-    description: 'Algorithmic line patterns drawn through mathematical motion — a classic generative art study in rhythm and form.',
+    title: 'Text Drawing Tool',
+    description: 'Drag your mouse to paint with text — characters trace your gesture into an emergent typographic composition.',
     category: 'interactive',
     tech: 'p5.js · Generative Design',
     thumbnail: 'from-[#050508] via-[#0a0a14] to-[#050508]',
     camera: false,
-    hint: 'Move mouse to influence pattern · Click to reset',
+    hint: 'Drag mouse to draw · Backspace to clear',
     html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}</style><script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"><\/script></head><body><script src="/visuals/generative-lines/mySketch.js"><\/script></body></html>`,
   },
 
@@ -1985,7 +1985,7 @@ function Particle(loc,sz,gravity,mass){
     thumbnail: 'from-[#001428] via-[#002840] to-[#001428]',
     camera: false,
     hint: 'Watch the text breathe',
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;overflow:hidden}body{background:#001428}</style><script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"><\/script></head><body><script src="/visuals/philosophy-text/mySketch.js"><\/script></body></html>`,
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0}html,body{height:100%;background:#232323}body{display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh}canvas{display:block}</style><script src="https://cdn.jsdelivr.net/npm/p5@2.0.3/lib/p5.js"><\/script></head><body><div id="sketch1"></div><script src="/visuals/philosophy-text/mySketch.js"><\/script></body></html>`,
   },
 
   {

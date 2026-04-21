@@ -7,8 +7,8 @@
 let img, nodes, connections, planes, mapImg
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-	img = loadImage('plane.png')
-	mapImg = loadImage('map.png')
+	img = loadImage('/visuals/nodes-network/plane.png')
+	mapImg = loadImage('/visuals/nodes-network/map.png')
 	nodes = []
 	connections = []
 	planes = []
