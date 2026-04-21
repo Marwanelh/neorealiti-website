@@ -111,8 +111,18 @@ function DemoCard({ demo }: { demo: Demo }) {
     >
       {/* Thumbnail */}
       <div className="h-52 relative overflow-hidden bg-black">
-        {/* Gradient bg — always present, fades out when live preview loads */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${demo.thumbnail} transition-opacity duration-500 ${thumbSrc ? 'opacity-0' : 'opacity-100'}`} />
+        {/* Static PNG screenshot — shown by default */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/images/visuals/${demo.id}.png`}
+          alt={demo.title}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${thumbSrc ? 'opacity-0' : 'opacity-100'}`}
+          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+        />
+        {/* Gradient fallback — shows if no PNG yet (camera-only demos etc) */}
+        {!thumbSrc && (
+          <div className={`absolute inset-0 bg-gradient-to-br ${demo.thumbnail} opacity-60`} />
+        )}
 
         {/* Grid overlay */}
         <div
@@ -120,7 +130,7 @@ function DemoCard({ demo }: { demo: Demo }) {
           style={{ backgroundImage: 'linear-gradient(rgba(0,129,151,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,129,151,0.3) 1px, transparent 1px)', backgroundSize: '32px 32px' }}
         />
 
-        {/* Live preview iframe (non-camera demos, lazy-loaded) */}
+        {/* Live preview iframe — loads on hover, replaces screenshot */}
         {thumbSrc && (
           <iframe
             src={thumbSrc}
