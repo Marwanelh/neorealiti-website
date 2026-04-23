@@ -55,12 +55,42 @@ const services = [
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="15" height="11" rx="1" /><path d="M17 7h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-3" /><path d="M6 17v2m3-2v2m-4 2h8" /><line x1="19" y1="11" x2="19" y2="13" />
+        <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8m-4-4v4" />
       </svg>
     ),
-    title: 'Web & Mobile',
-    desc: 'Custom web and mobile applications built for performance, scale, and seamless user experience — from concept to deployment.',
-    tags: ['Web', 'Mobile', 'UX'],
+    title: 'Web Development',
+    desc: 'High-performance websites and web applications — from marketing platforms to complex enterprise portals, built for scale.',
+    tags: ['React', 'Next.js', 'Full-Stack'],
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="7" y="2" width="10" height="20" rx="2" /><line x1="12" y1="18" x2="12" y2="18.01" />
+      </svg>
+    ),
+    title: 'Mobile Apps',
+    desc: 'Native and cross-platform mobile applications for iOS and Android — intuitive, fast, and built around your users.',
+    tags: ['iOS', 'Android', 'React Native'],
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+      </svg>
+    ),
+    title: 'UI / UX Design',
+    desc: 'Research-led design that bridges aesthetics and function — wireframes, prototypes, and design systems that convert.',
+    tags: ['Figma', 'Design System', 'Prototyping'],
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    ),
+    title: 'Security',
+    desc: 'End-to-end cybersecurity consulting — penetration testing, secure architecture, and compliance for digital products.',
+    tags: ['Cybersecurity', 'Compliance', 'Audit'],
   },
   {
     icon: (
