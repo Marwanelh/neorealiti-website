@@ -95,6 +95,16 @@ const services = [
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 12V7a7 7 0 0 1 14 0v5" /><rect x="2" y="12" width="20" height="10" rx="2" /><circle cx="12" cy="17" r="1" />
+      </svg>
+    ),
+    title: 'Interactive Installations',
+    desc: 'Bespoke sensor-driven experiences for museums, exhibitions, and brand activations — where physical and digital converge.',
+    tags: ['Generative Art', 'Sensors', 'Events'],
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 3v18h18" /><path d="M18 17V9M13 17V5M8 17v-3" />
       </svg>
     ),
