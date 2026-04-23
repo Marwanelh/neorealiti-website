@@ -55,12 +55,12 @@ const services = [
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" />
+        <rect x="2" y="3" width="15" height="11" rx="1" /><path d="M17 7h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-3" /><path d="M6 17v2m3-2v2m-4 2h8" /><line x1="19" y1="11" x2="19" y2="13" />
       </svg>
     ),
-    title: 'VR Training Simulations',
-    desc: 'High-fidelity virtual environments for safety training, onboarding, and skills assessment — with measurable outcomes.',
-    tags: ['VR', 'Training', 'Safety'],
+    title: 'Web & Mobile',
+    desc: 'Custom web and mobile applications built for performance, scale, and seamless user experience — from concept to deployment.',
+    tags: ['Web', 'Mobile', 'UX'],
   },
   {
     icon: (
